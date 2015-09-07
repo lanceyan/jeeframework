@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="WARN">
+    <Properties>
+        <Property name="fileName">front.log</Property>
+        <Property name="backupFilePatch">d:/usr/front/log/</Property>
+    </Properties>
+    <appenders>
+        <Console name="STDOUT" target="SYSTEM_OUT">
+            <PatternLayout pattern="%d{HH:mm:ss.SSS} [%t] %-5level %M-%L- %msg%n"/>
+        </Console>
+        <RollingFile name="RollingFile" fileName="d:/log/web-log-test.log"
+                     filePattern="d:/log/$${date:yyyy-MM}/app-%d{MM-dd-yyyy}-%i.log.gz">
+            <PatternLayout>
+                <Pattern>%d{MM-dd-yyyy} %p %c{1.} [%t] -%M-%L- %m%n</Pattern>
+            </PatternLayout>
+            <Policies>
+                <TimeBasedTriggeringPolicy />
+                <SizeBasedTriggeringPolicy size="1 KB"/>
+            </Policies>
+            <DefaultRolloverStrategy fileIndex="max" max="2"/>
+        </RollingFile>
+    </appenders>
+
+    <loggers>
+        <logger name="com.jeeframework.log4j2"  level="trace">
+            <appender-ref ref="RollingFile"/>
+        </logger>
+        <root level="trace">
+            <appender-ref ref="STDOUT"/>
+        </root>
+    </loggers>
+</Configuration>

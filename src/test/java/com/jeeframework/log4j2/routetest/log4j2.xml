@@ -1,0 +1,40 @@
+<!--?xml version="1.0" encoding="UTF-8"?-->
+<configuration status="error">
+    <appenders>
+        <console name="Console" target="SYSTEM_OUT">
+            <!--<thresholdfilter level="DEBUG" onmatch="ACCEPT" onmismatch="DENY">-->
+                <!-- Flow tracing is most useful with a pattern that shows location.
+                     Below pattern outputs class, line number and method name. -->
+                <patternlayout pattern="%d{HH:mm:ss.SSS} %-5level %class{36} %L %M - %msg%xEx%n">
+                </patternlayout>
+            <!--</thresholdfilter>-->
+        </console>
+
+        <!-- START: For com.turreta.apache.log4j2.thread.FileProcessorTest -->
+        <routing name="RoutingAppender">
+            <routes pattern="${ctx:countryCode}">
+                <route>
+                    <rollingfile filename="d:/log/${ctx:countryCode}/test.log"
+                                 filepattern="d:/log/${ctx:countryCode}/test.%i.log.gz"
+                                 name="Rolling-${ctx:countryCode}">
+                        <patternlayout pattern="%d{ABSOLUTE} %level{length=5} [%thread] %logger{1} - %msg%n">
+                        </patternlayout>
+                        <Policies>
+                            <SizeBasedTriggeringPolicy size="1 KB"/>
+                        </Policies>
+                    </rollingfile>
+                </route>
+            </routes>
+        </routing>
+        <!-- END: For com.turreta.apache.log4j2.thread.FileProcessorTest -->
+
+    </appenders>
+
+    <loggers>
+        <logger additivity="false" level="debug" name="com.jeeframework">
+            <appenderref ref="RoutingAppender">
+            </appenderref>
+        </logger>
+
+    </loggers>
+</configuration>
