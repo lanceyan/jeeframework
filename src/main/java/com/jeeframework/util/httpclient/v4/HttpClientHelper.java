@@ -24,6 +24,7 @@ import org.apache.http.conn.HttpClientConnectionManager;
 import org.apache.http.conn.socket.ConnectionSocketFactory;
 import org.apache.http.conn.socket.PlainConnectionSocketFactory;
 import org.apache.http.conn.ssl.*;
+import org.apache.http.entity.ByteArrayEntity;
 import org.apache.http.entity.ContentType;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.entity.mime.HttpMultipartMode;
@@ -947,6 +948,178 @@ public class HttpClientHelper {
 
             httpPost.setHeaders(headersArray);
             StringEntity s = new StringEntity(stringEntity);
+            httpPost.setEntity(s);
+
+
+            // 设置httpclient可以发送请求到相同的url上
+            CloseableHttpResponse response = httpClient.execute(httpPost, context);
+            HttpEntity responseEntity = null;
+
+            try {
+                responseEntity = response.getEntity();
+
+                HttpRequest currentReq = (HttpRequest) context.getAttribute(
+                        HttpCoreContext.HTTP_REQUEST);
+
+                HttpHost currentHost = (HttpHost) context.getAttribute(
+                        HttpCoreContext.HTTP_TARGET_HOST);
+//                String currentUrl = (currentReq.getURI().isAbsolute()) ? currentReq.getURI().toString() : (currentHost.toURI() + currentReq.getURI());
+
+                String currentUrl = currentHost.toURI() + currentReq.getRequestLine().getUri();
+                httpResponse.setTargetUrl(currentUrl);
+
+                StatusLine statusLine = response.getStatusLine();
+
+                int statusCode = statusLine.getStatusCode();
+
+                httpResponse.setStatusCode(statusCode);
+                if (statusCode != HttpStatus.SC_OK) {
+                    if (statusCode == HttpStatus.SC_NOT_FOUND) {
+                        throw new BaseException("404 Not Found");
+                    }
+                    throw new HttpException("出错了，错误码为：" + statusCode);
+                }
+
+
+                if (responseEntity != null) {
+                    InputStream inStream = responseEntity.getContent();
+                    ContentType contentType = ContentType.getOrDefault(responseEntity);
+                    Charset charset = contentType.getCharset();
+
+
+                    try {
+                        Header contentEncodingHeader = responseEntity.getContentEncoding();
+
+                        String acceptEncoding = contentEncodingHeader != null ? contentEncodingHeader.getValue() : null;
+
+                        if (acceptEncoding != null && acceptEncoding.toLowerCase().indexOf("gzip") > -1) {
+                            GZIPInputStream gzin = new GZIPInputStream(inStream);
+                            try {
+                                responseStr = readStreamToString(charset, gzin);
+                            } finally {
+                                if (gzin != null) {
+                                    gzin.close();
+                                }
+                            }
+
+                        } else {
+                            responseStr = readStreamToString(charset, inStream);
+                        }
+                        // do something useful with the response
+                    } catch (IOException ex) {
+                        // In case of an IOException the connection will be released
+                        // back to the connection manager automatically
+                        throw ex;
+                    } finally {
+                        // Closing the input stream will trigger connection release
+                        if (inStream != null) {
+                            inStream.close();
+                        }
+                    }
+                } else {
+                    if (statusCode != 200) {
+                        throw new BizException("访问网络资源出现问题，错误码为： " + statusCode);
+                    }
+                    return httpResponse;
+                }
+            } finally {
+                if (responseEntity != null) {
+                    EntityUtils.consume(responseEntity);
+                }
+                if (response != null) {
+                    response.close();
+                }
+            }
+
+        } catch (HttpException e) {
+            throw e;
+        } catch (ClientProtocolException e) {
+            throw e;
+        } catch (IOException e) {
+            throw e;
+        } finally {
+            httpResponse.setContent(responseStr);
+//            httpClient.close();
+            //如果 httpclient 有登录，关闭了登录状态就没有了
+        }
+        return httpResponse;
+    }
+
+
+    public HttpResponse doPostBytes(String url, byte[] bytesEntity, String requestEncoding,
+                                     String responseEncoding, Map<String, String> headerMap, SiteProxyIp proxyIp)
+            throws HttpException, IOException {
+        int retryTimes = 0;
+        while (true) {
+            try {
+                return doPostBytesWrapper(url, bytesEntity, requestEncoding, responseEncoding, headerMap, proxyIp);
+            } catch (IOException e) {
+                retryTimes++;
+                if (retryTimes == retry_times) {
+                    throw e;
+                }
+            }
+        }
+    }
+
+    private HttpResponse doPostBytesWrapper(String url, byte[] bytesEntity, String requestEncoding, String responseEncoding, Map<String, String> headerMap, SiteProxyIp proxyIp) throws HttpException, IOException {
+
+        HttpResponse httpResponse = new HttpResponse();
+        httpResponse.setRequestEncode(requestEncoding);
+        httpResponse.setResponseEncode(responseEncoding);
+        httpResponse.setRequestUrl(url);
+
+        RequestConfig defaultRequestConfig = RequestConfig.custom()
+                .setCookieSpec(CookieSpecs.BEST_MATCH)
+                .setExpectContinueEnabled(true)
+                .setStaleConnectionCheckEnabled(true)
+                .setTargetPreferredAuthSchemes(Arrays.asList(AuthSchemes.NTLM, AuthSchemes.DIGEST))
+                .setProxyPreferredAuthSchemes(Arrays.asList(AuthSchemes.BASIC))
+                .build();
+
+        RequestConfig.Builder requestConfigBuilder = RequestConfig.copy(defaultRequestConfig);
+        requestConfigBuilder = requestConfigBuilder
+                .setSocketTimeout(soTimeout)
+                .setConnectTimeout(connectionTimeout)
+                .setConnectionRequestTimeout(connectionTimeout);
+
+        if (proxyIp != null) {
+            requestConfigBuilder.setProxy(new HttpHost(proxyIp.getHost(), proxyIp.getPort()));
+        }
+
+        RequestConfig requestConfig = requestConfigBuilder.build();
+
+
+//        if (null == requestEncoding || requestEncoding.trim().length() == 0) {
+//            requestEncoding = "utf-8";
+//        }
+
+        if (requestEncoding.trim().equalsIgnoreCase("gb2312")) {
+            requestEncoding = "gbk";
+        }
+
+//        if (url.startsWith("https:")) {
+//            this.supportSSL(url);
+//        }
+        String responseStr = null;
+        HttpPost httpPost = null;
+        try {
+
+            httpPost = new HttpPost(url);
+
+            httpPost.setConfig(requestConfig);
+
+            List<Header> headers = getHeaders(headerMap);
+
+            if (!Validate.isEmpty(requestEncoding)) {
+                headers.add(new BasicHeader("Accept-Charset", requestEncoding));
+            }
+
+            Header[] headersArray = new Header[headers.size()];
+            headersArray = headers.toArray(headersArray);
+
+            httpPost.setHeaders(headersArray);
+            ByteArrayEntity s = new ByteArrayEntity(bytesEntity);
             httpPost.setEntity(s);
 
 
