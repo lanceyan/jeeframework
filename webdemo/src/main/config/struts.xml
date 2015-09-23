@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="GBK"?>
+<!-- 指定Struts 2配置文件的DTD信息 -->
+<!DOCTYPE struts PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+ "http://struts.apache.org/dtds/struts-2.0.dtd">
+
+<!-- struts是Struts 2配置文件的根元素 -->
+
+<struts>
+
+	<bean class="com.jeeframework.webframework.dispatcher.LinkTongDispatcher" static="true" />
+    <constant name="struts.objectFactory" value="org.apache.struts2.spring.StrutsSpringObjectFactory" />
+	<constant name="struts.devMode" value="true" />
+	<constant name="struts.action.extension" value="xhtml" />
+    <constant name="struts.url.includeParams" value="none" />
+    <constant name="struts.locale" value="zh_CN" />
+    <constant name="struts.i18n.encoding" value="GBK"/>
+
+    <include file="conf-struts/struts-*.xml"/>    
+
+</struts>

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="WARN">
+    <appenders>
+        <Console name="STDOUT" target="SYSTEM_OUT">
+            <PatternLayout pattern="%d{HH:mm:ss.SSS} [%t] %-5level %M-%L- %msg%n"/>
+        </Console>
+    </appenders>
+
+    <loggers>
+        <root level="trace">
+            <appender-ref ref="STDOUT"/>
+        </root>
+    </loggers>
+</Configuration>

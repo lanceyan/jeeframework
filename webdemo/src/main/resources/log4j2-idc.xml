@@ -1,0 +1,136 @@
+<!--?xml version="1.0" encoding="UTF-8"?-->
+<configuration status="error" monitorInterval="1800">
+    <Properties>
+        <Property name="root.log.name">global.log</Property>
+        <Property name="log.file.size">20MB</Property>
+        <Property name="log.file.count">20</Property>
+        <Property name="log.dir">${sys:log.dir}</Property>
+        <Property name="back.log.dir">${sys:log.dir}/back</Property>
+        <Property name="root.log.level">${sys:root.log.level}</Property>
+        <Property name="run.log.level">${sys:run.log.level}</Property>
+        <Property name="run.log.additivity">${sys:run.log.additivity}</Property>
+    </Properties>
+
+    <appenders>
+        <Console name="STDOUT" target="SYSTEM_OUT" ignoreExceptions="false">
+            <ThresholdFilter level="TRACE" onMatch="ACCEPT" onMismatch="DENY"/>
+            <!--<PatternLayout charset="${sys:file.encoding}"-->
+            <!--pattern="%d{yyyy-MM-dd HH:mm:ss.SSS} %-5level [%thread] %logger{1} %msg%n"/>-->
+            <patternlayout
+                    pattern="%d{yyyy-MM-dd HH:mm:ss.SSS} %-5level [%thread] %class{1} %L %M %msg%n"/>
+        </Console>
+
+        <!-- 程序员调试日志 -->
+        <RollingRandomAccessFile name="RootFileLog" fileName="${log.dir}/${root.log.name}"
+                                 filePattern="${back.log.dir}/${root.log.name}.%d{yyyy-MM-dd-HH}.%i.log.gz" immediateFlush="true" ignoreExceptions="false">
+            <!--<PatternLayout pattern="%date{yyyy-MM-dd HH:mm:ss.SSS} %level [%thread][%file : %M : %line] - %msg%n" />-->
+            <patternlayout
+                    pattern="%d{yyyy-MM-dd HH:mm:ss.SSS} %-5level [%thread] %class{1} %L %M %msg%n"/>
+            <Policies>
+                <TimeBasedTriggeringPolicy interval="1" modulate="true"/>
+                <SizeBasedTriggeringPolicy size="${log.file.size}"/>
+            </Policies>
+            <DefaultRolloverStrategy fileIndex="max" max="${log.file.count}" />
+        </RollingRandomAccessFile>
+
+        <!--interval，integer型，指定两次封存动作之间的时间间隔。单位:以日志的命名精度来确定单位，比如yyyy-MM-dd-HH 单位为小时，yyyy-MM-dd-HH-mm 单位为分钟-->
+        <!--modulate，boolean型，说明是否对封存时间进行调制。若modulate=true，则封存时间将以0点为边界进行偏移计算。比如，modulate=true，interval=4hours，那么假设上次封存日志的时间为03:00，则下次封存日志的时间为04:00，之后的封存时间依次为08:00，12:00，16:00，。。。 -->
+        <routing name="DebugRoutingAppender">
+            <routes pattern="${ctx:busiModule}">
+                <route>
+                    <rollingfile filename="${log.dir}/${ctx:busiModule}/debug.log"
+                                 filepattern="${back.log.dir}/${ctx:busiModule}/debug/%d{yyyy-MM-dd}.%i.log.gz"
+                                 name="Rolling-${ctx:busiModule}" immediateFlush="true" ignoreExceptions="false">
+                        <Filters>
+                            <ThresholdFilter level="info" onMatch="DENY" onMismatch="NEUTRAL"/>
+                            <ThresholdFilter level="DEBUG" onMatch="ACCEPT" onMismatch="DENY"/>
+                        </Filters>
+                        <patternlayout
+                                pattern="%d{yyyy-MM-dd HH:mm:ss.SSS} %-5level [%thread] ${ctx:busiModule} %class{1} %L %M %msg%n"/>
+                        <Policies>
+                            <TimeBasedTriggeringPolicy interval="1" modulate="true"/>
+                            <SizeBasedTriggeringPolicy size="${log.file.size}"/>
+                        </Policies>
+                        <!---->
+                        <DefaultRolloverStrategy fileIndex="max" max="${log.file.count}" />
+                    </rollingfile>
+                </route>
+            </routes>
+        </routing>
+        <routing name="InfoRoutingAppender">
+            <routes pattern="${ctx:busiModule}">
+                <route>
+                    <rollingfile filename="${log.dir}/${ctx:busiModule}/info.log"
+                                 filepattern="${back.log.dir}/${ctx:busiModule}/info/%d{yyyy-MM-dd}.%i.log.gz"
+                                 name="Rolling-${ctx:busiModule}" immediateFlush="true" ignoreExceptions="false">
+                        <Filters>
+                            <ThresholdFilter level="warn" onMatch="DENY" onMismatch="NEUTRAL"/>
+                            <ThresholdFilter level="INFO" onMatch="ACCEPT" onMismatch="DENY"/>\
+                        </Filters>
+                        <patternlayout pattern="%d{yyyy-MM-dd HH:mm:ss.SSS} %-5level ${ctx:busiModule} %msg%n"/>
+                        <Policies>
+                            <TimeBasedTriggeringPolicy interval="1" modulate="true"/>
+                            <SizeBasedTriggeringPolicy size="${log.file.size}"/>
+                        </Policies>
+                        <DefaultRolloverStrategy fileIndex="max" max="${log.file.count}" />
+                    </rollingfile>
+                </route>
+            </routes>
+        </routing>
+        <routing name="ErrorRoutingAppender">
+            <routes pattern="${ctx:busiModule}">
+                <route>
+                    <rollingfile filename="${log.dir}/${ctx:busiModule}/error.log"
+                                 filepattern="${back.log.dir}/${ctx:busiModule}/error/%d{yyyy-MM-dd}.%i.log.gz"
+                                 name="Rolling-${ctx:busiModule}" immediateFlush="true" ignoreExceptions="false">
+                        <Filters>
+                            <ThresholdFilter level="warn" onMatch="ACCEPT" onMismatch="DENY"/>
+                        </Filters>
+                        <patternlayout
+                                pattern="%d{yyyy-MM-dd HH:mm:ss.SSS} %-5level [%thread] ${ctx:busiModule} %class{1} %L %M %msg%n"/>
+                        <Policies>
+                            <TimeBasedTriggeringPolicy interval="1" modulate="true"/>
+                            <SizeBasedTriggeringPolicy size="${log.file.size}"/>
+                        </Policies>
+                        <DefaultRolloverStrategy fileIndex="max" max="${log.file.count}" />
+                    </rollingfile>
+                </route>
+            </routes>
+        </routing>
+
+        <Async name="AsyncDebugRoutingAppender" includeLocation="true">
+            <AppenderRef ref="DebugRoutingAppender"/>
+        </Async>
+        <Async name="AsyncErrorRoutingAppender" includeLocation="true" >
+            <AppenderRef ref="ErrorRoutingAppender"/>
+        </Async>
+    </appenders>
+
+    <loggers>
+        <logger additivity="${run.log.additivity}" level="${run.log.level}" name="com.webdemo"  >
+            <appenderref ref="AsyncDebugRoutingAppender" />
+            <appenderref ref="InfoRoutingAppender"/>
+            <appenderref ref="AsyncErrorRoutingAppender"/>
+        </logger>
+        <Root level="${root.log.level}" includeLocation="true"><!-- level: ALL <= TRACE < DEBUG < INFO < WARN < ERROR < FATAL < OFF -->
+            <AppenderRef ref="STDOUT" />
+            <AppenderRef ref="RootFileLog"/>
+        </Root>
+
+
+        <logger name="org.springframework" level="info">
+        </logger>
+        <logger name="org.apache" level="info">
+        </logger>
+        <logger name="org.aspectj" level="info">
+        </logger>
+        <logger name="org.mybatis.spring" level="info">
+        </logger>
+        <logger name="org.quartz" level="info">
+        </logger>
+        <logger name="com.mangofactory" level="info">
+        </logger>
+
+
+    </loggers>
+</configuration>
