@@ -3,15 +3,12 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.jeeframework</groupId>
-    <artifactId>parent</artifactId>
+    <artifactId>jeeframework</artifactId>
     <version>0.0.5-SNAPSHOT</version>
-    <modules>
-        <module>sdk</module>
-        <module>webdemo</module>
-    </modules>
-    <packaging>pom</packaging>
 
-    <name>parent</name>
+    <packaging>jar</packaging>
+
+    <name>jeeframework</name>
     <url>http://www.jeeframework.com</url>
 
     <properties>
