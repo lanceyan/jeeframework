@@ -1542,14 +1542,6 @@ public abstract class StringUtils extends org.apache.commons.lang3.StringUtils {
         return join(collection.iterator(), separator);
     }
 
-    public static void main(String[] args) {
-        // TODO Auto-generated method stub
-        String str1 = "zhongguo";
-        String str2 = "dfdf中国d*@(@&#(@^#";
-
-        isHanzi2(str2);
-
-    }
 
     public static String getRandomString(int length) { //length表示生成字符串的长度
         //        String base = "abcdefghijklmnopqrstuvwxyz0123456789";
@@ -1764,17 +1756,56 @@ public abstract class StringUtils extends org.apache.commons.lang3.StringUtils {
     }
 
 
+    /**
+     * 判断是否是手机号
+     *
+     * @param mobiles
+     * @return
+     */
     public static boolean isMobile(String mobiles) {
-        Pattern p1 = Pattern.compile("^1[358]{1}[0-9]{9}$");
+//|(^00[1-9]{1}[0-9]{3,15}$)
+        Pattern p1 = Pattern.compile("(^1[0-9]{10}$)");
         Matcher m1 = p1.matcher(mobiles);
 
-        Pattern p2 = Pattern.compile("^852[69]{1}[0-9]{7}$");
-        Matcher m2 = p2.matcher(mobiles);
+//        Pattern p1 = Pattern.compile("^1[358]{1}[0-9]{9}$");
+//        Matcher m1 = p1.matcher(mobiles);
 
-        Pattern p3 = Pattern.compile("^88609[0-9]{8}$");
-        Matcher m3 = p3.matcher(mobiles);
+//        Pattern p2 = Pattern.compile("^852[69]{1}[0-9]{7}$");
+//        Matcher m2 = p2.matcher(mobiles);
+//
+//        Pattern p3 = Pattern.compile("^88609[0-9]{8}$");
+//        Matcher m3 = p3.matcher(mobiles);
 
-        return (m1.matches() || m2.matches() || m3.matches());
+        return m1.matches();
+    }
+
+    /**
+     * 判断是否是国外手机号
+     *
+     * @param mobiles
+     * @return
+     */
+    public static boolean isForeignPhone(String mobiles) {
+
+        Pattern p1 = Pattern.compile("^(00|\\+)?(86|852|853|886)[\\d]+");
+        Matcher m1 = p1.matcher(mobiles);
+
+
+        return !m1.matches() && !isMobile(mobiles);
+    }
+
+    /**
+     * 判断是否是港澳台手机号
+     *
+     * @param mobiles
+     * @return
+     */
+    public static boolean isGangAoTaiPhone(String mobiles) {
+
+        Pattern p1 = Pattern.compile("^(00|\\+)?(86|852|853|886)[\\d]+");
+        Matcher m1 = p1.matcher(mobiles);
+
+        return m1.matches();
     }
 
     /**
@@ -1881,5 +1912,20 @@ public abstract class StringUtils extends org.apache.commons.lang3.StringUtils {
         }
 
         return (ret);
+    }
+
+
+
+    public static void main(String[] args) {
+        // TODO Auto-generated method stub
+//        String str1 = "zhongguo";
+//        String str2 = "dfdf中国d*@(@&#(@^#";
+//
+//        isHanzi2(str2);
+
+        System.out.println( isMobile("17012345321"));
+        System.out.println( isForeignPhone("0042123"));
+        System.out.println( isGangAoTaiPhone("17012345321"));
+
     }
 }

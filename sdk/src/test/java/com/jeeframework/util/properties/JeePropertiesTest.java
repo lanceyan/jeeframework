@@ -13,7 +13,7 @@ public class JeePropertiesTest {
         JeeProperties props = new JeeProperties(
                 "http.ini");
         assertEquals("127.0.0.1", props.getProperty("http.host"));
-        assertEquals("8080", props.getProperty("http.port"));
+        assertEquals("80", props.getProperty("http.port"));
         assertNull(props.getProperty("test"));
         assertNull(props.getProperty("nothing.something"));
     }

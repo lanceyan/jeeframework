@@ -4,7 +4,7 @@
 <mapper namespace="userMapper">
     <!-- TODO: 在这里定义各种sql语句，用法请参考iBATIS文档 -->
 
-    <select id="getUsers" parameterType="com.webdemo.web.filter.UserFilter" resultType="com.webdemo.integration.bo.User">
+    <select id="getUsers" parameterType="com.jeeframework.webdemo.web.filter.UserFilter" resultType="com.jeeframework.webdemo.integration.bo.User">
         SELECT uid,mobile,sex,city,province,country,nickname,description,passwd,avatar,birthday,token,createtime,lastmodifytime FROM user
         <where>
             <if test="greatCreateTime != null  ">
@@ -31,7 +31,7 @@
         </if>
     </select> 
 
-    <select id="getUserCount" parameterType="com.webdemo.web.filter.UserFilter" resultType="java.lang.Long">
+    <select id="getUserCount" parameterType="com.jeeframework.webdemo.web.filter.UserFilter" resultType="java.lang.Long">
         SELECT count(uid) FROM user
         <where>
             <if test="greatCreateTime != null  ">

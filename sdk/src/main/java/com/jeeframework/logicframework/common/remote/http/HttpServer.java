@@ -54,7 +54,7 @@ public final class HttpServer {
         return instance;
     }
 
-    private static JeeProperties httpProperties = null;
+    private JeeProperties httpProperties = null;
 
     private String webroot = null; //web根目录
 
@@ -190,7 +190,7 @@ public final class HttpServer {
     public static void main(String[] args) throws IOException, XmlPullParserException {
 
 
-        HttpServer httpServer = new HttpServer();
+        HttpServer httpServer = HttpServer.getInstance();
         httpServer.start();
 
 //        File[] commonsLang = Maven.resolver().loadPomFromFile("F:\\myproject\\intellij\\testgitlite\\jeeframework\\" + "pom.xml").importDependencies(ScopeType.TEST, ScopeType.PROVIDED, ScopeType.COMPILE, ScopeType.RUNTIME).resolve().withTransitivity().asFile();

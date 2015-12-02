@@ -16,7 +16,7 @@
     <description> 定义业务层和集成层对象，包括Action、Service、BO、DAO、SAO、JNDI资源	</description>
     
     
-    <context:component-scan base-package="com.webdemo.util,com.webdemo.biz.service.impl.local,com.webdemo.integration.impl.ibatis" />
+    <context:component-scan base-package="com.jeeframework.webdemo.util,com.jeeframework.webdemo.biz.service.impl.local,com.jeeframework.webdemo.integration.impl.ibatis" />
     <!--===================================================================== -->
     <!-- 配置外部变量文件 -->
     <!--===================================================================== -->
@@ -85,7 +85,7 @@
     </tx:advice>
 
     <aop:config>
-        <aop:pointcut id="ServiceOperation" expression="execution(* com.webdemo.biz.service.impl.local.*.*(..))" />
+        <aop:pointcut id="ServiceOperation" expression="execution(* com.jeeframework.webdemo.biz.service.impl.local.*.*(..))" />
         <aop:advisor advice-ref="txAdvice" pointcut-ref="ServiceOperation" />
     </aop:config>
 

@@ -1,6 +1,6 @@
 package com.jeeframework.logicframework.integration.dao.datasource;
 
-import org.apache.commons.dbcp.BasicDataSource;
+import org.apache.commons.dbcp2.BasicDataSource;
 import org.springframework.jdbc.datasource.lookup.AbstractRoutingDataSource;
 
 import java.sql.Connection;

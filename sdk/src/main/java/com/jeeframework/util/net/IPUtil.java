@@ -1,15 +1,16 @@
 package com.jeeframework.util.net;
 
+import com.jeeframework.util.validate.Validate;
+import sun.net.util.IPAddressUtil;
+
 import java.net.Inet6Address;
 import java.net.InetAddress;
 import java.net.NetworkInterface;
-import java.util.Enumeration;
-
-import sun.net.util.IPAddressUtil;
+import java.util.*;
 
 /**
  * IPת�����ߣ���Ϊ�ų�ǿ���javaû���ṩ��
- * 
+ *
  * @author hokyhu
  * @version 1.0���°汾�ţ�
  * @see �ο���JavaDoc
@@ -17,7 +18,7 @@ import sun.net.util.IPAddressUtil;
 public class IPUtil {
     /**
      * ��ipv4��ʽ���ַ�תΪ�����ʽ����������C API��inet_pton
-     * 
+     *
      * @param ip �ַ��ʽ��IP
      * @return IP��Ӧ������ֵ������ʱ���ظ���
      */
@@ -43,7 +44,7 @@ public class IPUtil {
 
     /**
      * ��һ������תΪipv4��ʽ���ַ���������C API��inet_ntop
-     * 
+     *
      * @param ip ����
      * @return �����Ӧ��ipv4�ַ�����ʱ����null��
      */
@@ -67,10 +68,10 @@ public class IPUtil {
 
     /**
      * 简单描述：判断是否是内网ip
-     * <p>
-     * 
+     * <p/>
+     * <p/>
      * tcp/ip协议中，专门保留了三个IP地址区域作为私有地址，其地址范围如下： 10.0.0.0/8：10.0.0.0～10.255.255.255 172.16.0.0/12：172.16.0.0～172.31.255.255 192.168.0.0/16：192.168.0.0～192.168.255.255
-     * 
+     *
      * @param ip
      * @return
      */
@@ -110,20 +111,21 @@ public class IPUtil {
 
     /**
      * 简单描述：获取局域网的地址
-     * <p>
-     * 
+     * <p/>
+     *
      * @return
      */
     public static String getLocalIpV4() {
         String sIP = "";
         InetAddress ip = null;
         boolean bFindIP = false;
+        List<String> ipList = new ArrayList<String>();
         try {
             Enumeration netInterfaces = (Enumeration) NetworkInterface.getNetworkInterfaces();
             while (netInterfaces.hasMoreElements()) {
-                if (bFindIP) {
-                    break;
-                }
+//                if (bFindIP) {
+//                    break;
+//                }
                 NetworkInterface ni = (NetworkInterface) netInterfaces.nextElement();
                 Enumeration ips = ni.getInetAddresses();// 遍历所有ip
                 while (ips.hasMoreElements()) {
@@ -137,7 +139,8 @@ public class IPUtil {
 
                         if (!currentIPTemp.equals("127.0.0.1") && IPUtil.internalIp(currentIPTemp)) {
                             bFindIP = true;
-                            break;
+                            ipList.add(ip.getHostAddress());
+//                            break;
                         }
 
                     }
@@ -146,16 +149,20 @@ public class IPUtil {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        if (bFindIP && null != ip) {
-            sIP = ip.getHostAddress();
+//        if (bFindIP && null != ip) {
+//            sIP = ip.getHostAddress();
+//        }
+        if (bFindIP && !Validate.isEmpty(ipList)) {
+            Collections.sort(ipList);
+            sIP = ipList.get(0);
         }
         return sIP;
     }
 
     /**
      * 简单描述：获取外网的地址
-     * <p>
-     * 
+     * <p/>
+     *
      * @return
      */
     public static String getOutNetIPV4() {
@@ -202,4 +209,10 @@ public class IPUtil {
         }
         return sIP;
     }
+
+    public static void main(String[] args) {
+
+        System.out.println(getLocalIpV4());
+    }
+
 }
