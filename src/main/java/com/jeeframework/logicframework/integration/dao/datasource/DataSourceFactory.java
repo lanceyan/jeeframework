@@ -46,7 +46,7 @@ public class DataSourceFactory extends AbstractRoutingDataSource {
 	 * @see org.springframework.jdbc.datasource.lookup.AbstractRoutingDataSource#getConnection()
 	 */
 	public Connection getConnection() throws SQLException {
-		BasicDataSource bds = (BasicDataSource) determineTargetDataSource();
+//		BasicDataSource bds = (BasicDataSource) determineTargetDataSource();
 		Connection con = determineTargetDataSource().getConnection();
 
 		// System.out.println("��ǰ���ӵĶ���Ϊ �� " + con);
