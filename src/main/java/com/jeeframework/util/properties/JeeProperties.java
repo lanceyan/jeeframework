@@ -59,7 +59,7 @@ public class JeeProperties extends Properties {
                 new Thread(new ReloadThread()).start();
             }
         } catch (IOException e) {
-            Log.error("Error load properties fromo " + resourceName, e);
+            Log.error("Error load properties from " + resourceName, e);
         }
     }
 

@@ -796,8 +796,8 @@ public final class ByteStream
 		}
 		else
 		{
-			if (object instanceof ICanSerializeObject)
-				return ((ICanSerializeObject) object).getSize();
+			if (object instanceof JeeSerializable)
+				return ((JeeSerializable) object).getSize();
 			else if (object instanceof String)
 				return 4 + ((String) object).getBytes().length;
 			else if (object instanceof byte[])
@@ -981,9 +981,9 @@ public final class ByteStream
 			return ;
 		}
 
-		if (object instanceof ICanSerializeObject)
+		if (object instanceof JeeSerializable)
 
-			((ICanSerializeObject) object).serialize(this);
+			((JeeSerializable) object).serialize(this);
 
 		else if (object instanceof Vector<?>)
 			pushVector((Vector<Object>) object);
@@ -1030,8 +1030,8 @@ public final class ByteStream
 		if (!(clazz == byte[].class || clazz == Integer.class || clazz == Long.class || clazz == Short.class || clazz == uint8_t.class || clazz == uint16_t.class || clazz == uint32_t.class ))
 			 ret = clazz.newInstance();
 			
-		if (ret instanceof ICanSerializeObject)
-			((ICanSerializeObject) ret).unSerialize(this);
+		if (ret instanceof JeeSerializable)
+			((JeeSerializable) ret).unSerialize(this);
 		else if (ret instanceof Vector<?>)
 			ret = popVector(clazz);
 		else if (clazz == byte[].class)
@@ -1123,8 +1123,8 @@ public final class ByteStream
 		} else {
 			try {
 				value = type.newInstance();
-				if (value instanceof ICanSerializeObject) {
-					((ICanSerializeObject) value).unSerialize(this);
+				if (value instanceof JeeSerializable) {
+					((JeeSerializable) value).unSerialize(this);
 
 				} else
 					value = null;

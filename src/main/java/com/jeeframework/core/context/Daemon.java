@@ -58,7 +58,7 @@ public class Daemon {
 			Class afterSpringContext = contextClassLoader.loadClass("AfterSpringContext");
 
 			// Class cc =
-			// Class.forName("com.jeeframework.logicframework.common.remote.AfterSpringContext");
+			// Class.forName("com.jeeframework.logicframework.util.server.AfterSpringContext");
 			Object afterSpringContextObj = afterSpringContext.newInstance();
 
 			// Method method =

@@ -65,12 +65,12 @@ public class MasterHessianProxyFactoryBean extends HessianProxyFactoryBean {
 	private Map<String, Object> hessianProxyMap = new HashMap<String, Object>();
 
 	/**
-	 * �滻url��remote.ip�ַ�
+	 * �滻url��server.ip�ַ�
 	 */
 	private static final String REMOTE_SERVER_IP = "#remote.ip#";
 
 	/**
-	 * �滻url��remote.port�ַ�
+	 * �滻url��server.port�ַ�
 	 */
 	private static final String REMOTE_SERVER_PORT = "#remote.port#";
 

@@ -1,7 +1,7 @@
 package com.jeeframework.logicframework.integration.dao.ibatis;
 
 import com.jeeframework.logicframework.beans.ContextManageBean;
-import com.jeeframework.logicframework.common.logging.LoggerUtil;
+import com.jeeframework.logicframework.util.logging.LoggerUtil;
 import com.jeeframework.logicframework.integration.dao.datasource.DataSourceRouterManager;
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.BeanFactory;

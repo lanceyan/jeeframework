@@ -15,7 +15,7 @@ package com.jeeframework.log4j2.routelogutil;
  * @version 1.0 2015-06-11 10:19
  */
 
-import com.jeeframework.logicframework.common.logging.LoggerUtil;
+import com.jeeframework.logicframework.util.logging.LoggerUtil;
 import com.jeeframework.util.resource.ResourceUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.core.LoggerContext;
