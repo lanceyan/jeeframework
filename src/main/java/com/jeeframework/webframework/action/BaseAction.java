@@ -1,6 +1,6 @@
 package com.jeeframework.webframework.action;
 
-import com.jeeframework.logicframework.common.logging.LoggerUtil;
+import com.jeeframework.logicframework.util.logging.LoggerUtil;
 import com.jeeframework.logicframework.integration.error.ErrorInfo;
 import com.jeeframework.util.validate.Validate;
 import com.jeeframework.webframework.exception.FieldValidateException;

@@ -1,6 +1,6 @@
 package com.jeeframework.logicframework.remoting.hessian;
 
-import com.jeeframework.logicframework.common.remote.PropertyReaderUtil;
+import com.jeeframework.logicframework.util.server.PropertyReaderUtil;
 import org.springframework.remoting.RemoteLookupFailureException;
 
 
