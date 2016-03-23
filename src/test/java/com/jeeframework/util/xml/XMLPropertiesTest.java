@@ -11,6 +11,9 @@ public class XMLPropertiesTest {
 
     @Test
     public void testAttributes() throws Exception {
+        String aaa = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa" +
+                "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa";
+
         String xml = "<root><foo></foo></root>";
         XMLProperties props = new XMLProperties(new ByteArrayInputStream(xml.getBytes()));
         assertNull(props.getAttribute("foo", "bar"));
