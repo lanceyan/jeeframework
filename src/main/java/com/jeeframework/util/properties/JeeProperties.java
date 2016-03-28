@@ -6,6 +6,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URISyntaxException;
@@ -92,6 +93,10 @@ public class JeeProperties extends Properties {
         }
         Properties properties = new Properties();
         URL url = clToUse.getResource(resourceName);
+        if(url == null)
+        {
+            throw new FileNotFoundException(resourceName + " file not found  ");
+        }
         loadPropsFromUrl(properties, url);
 //        Enumeration urls = clToUse.getResources(resourceName);
 //        while (urls.hasMoreElements()) {

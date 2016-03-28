@@ -87,6 +87,10 @@ public class XMLProperties {
         Assert.notNull(fileName, "fileName  must not be null");
         ClassLoader clToUse = ClassUtils.getDefaultClassLoader();
         URL url = clToUse.getResource(fileName);
+        if(url==null)
+        {
+            throw new FileNotFoundException(fileName + "  not found  ");
+        }
         InputStream is = null;
         try {
             URLConnection con = url.openConnection();
