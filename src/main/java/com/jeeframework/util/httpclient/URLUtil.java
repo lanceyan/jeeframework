@@ -6,7 +6,7 @@
  * Copyright (c) 2014 Hyfay Limited, Inc.
  * All rights reserved.
  */
-package com.jeeframework.util.httpclient.v4;
+package com.jeeframework.util.httpclient;
 
 import com.jeeframework.util.validate.Validate;
 import org.apache.commons.lang3.StringUtils;

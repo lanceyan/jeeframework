@@ -8,10 +8,6 @@ import com.jeeframework.logicframework.util.server.JeeFrameWorkServer;
 import com.jeeframework.logicframework.util.server.WebServerUtil;
 import com.jeeframework.util.string.StringUtils;
 import com.jeeframework.util.validate.Validate;
-import org.apache.maven.model.Model;
-import org.apache.maven.model.io.xpp3.MavenXpp3Reader;
-import org.apache.maven.project.MavenProject;
-import org.codehaus.plexus.util.xml.pull.XmlPullParserException;
 import org.eclipse.jetty.server.*;
 import org.eclipse.jetty.server.handler.ContextHandlerCollection;
 import org.eclipse.jetty.server.handler.DefaultHandler;
@@ -26,8 +22,6 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.web.context.support.WebApplicationContextUtils;
 
 import javax.servlet.ServletContext;
-import java.io.File;
-import java.io.FileReader;
 import java.io.IOException;
 
 public final class HttpServer {
@@ -206,9 +200,9 @@ public final class HttpServer {
     }
 
 
-    public static void main(String[] args) throws IOException, XmlPullParserException {
+    public static void main(String[] args) throws IOException {
 
-
+//, XmlPullParserException
 //        File[] commonsLang = Maven.resolver().loadPomFromFile("F:\\myproject\\intellij\\testgitlite\\jeeframework\\" + "pom.xml").importDependencies(ScopeType.TEST, ScopeType.PROVIDED, ScopeType.COMPILE, ScopeType.RUNTIME).resolve().withTransitivity().asFile();
 //
 //        for (File file : commonsLang) {
@@ -235,25 +229,25 @@ public final class HttpServer {
 //
 //        }
     }
-
-    public static MavenProject loadProject(File pomFile) throws IOException, XmlPullParserException {
-        MavenProject ret = null;
-        MavenXpp3Reader mavenReader = new MavenXpp3Reader();
-
-        if (pomFile != null && pomFile.exists()) {
-            FileReader reader = null;
-
-            try {
-                reader = new FileReader(pomFile);
-                Model model = mavenReader.read(reader);
-                model.setPomFile(pomFile);
-
-                ret = new MavenProject(model);
-            } finally {
-                reader.close();
-            }
-        }
-
-        return ret;
-    }
+//
+//    public static MavenProject loadProject(File pomFile) throws IOException, XmlPullParserException {
+//        MavenProject ret = null;
+//        MavenXpp3Reader mavenReader = new MavenXpp3Reader();
+//
+//        if (pomFile != null && pomFile.exists()) {
+//            FileReader reader = null;
+//
+//            try {
+//                reader = new FileReader(pomFile);
+//                Model model = mavenReader.read(reader);
+//                model.setPomFile(pomFile);
+//
+//                ret = new MavenProject(model);
+//            } finally {
+//                reader.close();
+//            }
+//        }
+//
+//        return ret;
+//    }
 }

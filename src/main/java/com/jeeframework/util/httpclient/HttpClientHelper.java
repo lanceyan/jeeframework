@@ -1,4 +1,4 @@
-package com.jeeframework.util.httpclient.v4;
+package com.jeeframework.util.httpclient;
 
 
 import com.jeeframework.core.exception.BaseException;
@@ -148,7 +148,7 @@ public class HttpClientHelper {
 //        return instance;
 //    }
 
-    public com.jeeframework.util.httpclient.v4.HttpResponse doGet(String url, String requestEncoding, String responseEncoding,
+    public HttpResponse doGet(String url, String requestEncoding, String responseEncoding,
                               Map<String, String> headerMap, SiteProxyIp proxyIp)
             throws HttpException, IOException {
         int retryTimes = 0;
@@ -164,7 +164,7 @@ public class HttpClientHelper {
         }
     }
 
-    public com.jeeframework.util.httpclient.v4.HttpResponse doGetAndRetBytes(String url, String requestEncoding, String responseEncoding,
+    public HttpResponse doGetAndRetBytes(String url, String requestEncoding, String responseEncoding,
                                          Map<String, String> headerMap, SiteProxyIp proxyIp)
             throws HttpException, IOException {
         int retryTimes = 0;
@@ -180,9 +180,9 @@ public class HttpClientHelper {
         }
     }
 
-    private com.jeeframework.util.httpclient.v4.HttpResponse doGetWrapper(String url, String requestEncoding, String responseEncoding, Map<String, String> headerMap, SiteProxyIp proxyIp, int responseType) throws HttpException, IOException {
+    private HttpResponse doGetWrapper(String url, String requestEncoding, String responseEncoding, Map<String, String> headerMap, SiteProxyIp proxyIp, int responseType) throws HttpException, IOException {
 
-        com.jeeframework.util.httpclient.v4.HttpResponse httpResponse = new com.jeeframework.util.httpclient.v4.HttpResponse();
+        HttpResponse httpResponse = new HttpResponse();
         httpResponse.setRequestEncode(requestEncoding);
         httpResponse.setResponseEncode(responseEncoding);
         httpResponse.setRequestUrl(url);
@@ -305,7 +305,7 @@ public class HttpClientHelper {
                                 responseBytes = readStreamToBytes(charset, inStream);
                             }
                             httpResponse.setContentBytes(responseBytes);
-                            httpResponse.setContentType(com.jeeframework.util.httpclient.v4.HttpResponse.CONTENT_TYPE_BYTE);
+                            httpResponse.setContentType(HttpResponse.CONTENT_TYPE_BYTE);
                         } else {
 
                             if (acceptEncoding != null && acceptEncoding.toLowerCase().indexOf("gzip") > -1) {
@@ -363,7 +363,7 @@ public class HttpClientHelper {
 
     }
 
-    public com.jeeframework.util.httpclient.v4.HttpResponse doPost(String url, Map<String, String> postData, String requestEncoding,
+    public HttpResponse doPost(String url, Map<String, String> postData, String requestEncoding,
                                String responseEncoding, Map<String, String> headerMap, SiteProxyIp proxyIp)
             throws HttpException, IOException {
         int retryTimes = 0;
@@ -380,7 +380,7 @@ public class HttpClientHelper {
         }
     }
 
-    public com.jeeframework.util.httpclient.v4.HttpResponse doPostAndRetBytes(String url, Map<String, String> postData, String requestEncoding,
+    public HttpResponse doPostAndRetBytes(String url, Map<String, String> postData, String requestEncoding,
                                           String responseEncoding, Map<String, String> headerMap, SiteProxyIp proxyIp)
             throws HttpException, IOException {
         int retryTimes = 0;
@@ -397,9 +397,9 @@ public class HttpClientHelper {
         }
     }
 
-    private com.jeeframework.util.httpclient.v4.HttpResponse doPostWrapper(String url, Map<String, String> postData, String requestEncoding, String responseEncoding, Map<String, String> headerMap, SiteProxyIp proxyIp, int responseType) throws HttpException, IOException {
+    private HttpResponse doPostWrapper(String url, Map<String, String> postData, String requestEncoding, String responseEncoding, Map<String, String> headerMap, SiteProxyIp proxyIp, int responseType) throws HttpException, IOException {
 
-        com.jeeframework.util.httpclient.v4.HttpResponse httpResponse = new com.jeeframework.util.httpclient.v4.HttpResponse();
+        HttpResponse httpResponse = new HttpResponse();
         httpResponse.setRequestEncode(requestEncoding);
         httpResponse.setResponseEncode(responseEncoding);
         httpResponse.setRequestUrl(url);
@@ -523,7 +523,7 @@ public class HttpClientHelper {
                                 responseBytes = readStreamToBytes(charset, inStream);
                             }
                             httpResponse.setContentBytes(responseBytes);
-                            httpResponse.setContentType(com.jeeframework.util.httpclient.v4.HttpResponse.CONTENT_TYPE_BYTE);
+                            httpResponse.setContentType(HttpResponse.CONTENT_TYPE_BYTE);
                         } else {
 
                             if (acceptEncoding != null && acceptEncoding.toLowerCase().indexOf("gzip") > -1) {
@@ -579,7 +579,7 @@ public class HttpClientHelper {
         return httpResponse;
     }
 
-    public com.jeeframework.util.httpclient.v4.HttpResponse doPostMultiPart(String url, Map<String, ContentBody> postData, String requestEncoding,
+    public HttpResponse doPostMultiPart(String url, Map<String, ContentBody> postData, String requestEncoding,
                                         String responseEncoding, Map<String, String> headerMap, SiteProxyIp proxyIp)
             throws HttpException, IOException {
         int retryTimes = 0;
@@ -595,9 +595,9 @@ public class HttpClientHelper {
         }
     }
 
-    private com.jeeframework.util.httpclient.v4.HttpResponse doPostMultiPartWrapper(String url, Map<String, ContentBody> postData, String requestEncoding, String responseEncoding, Map<String, String> headerMap, SiteProxyIp proxyIp) throws HttpException, IOException {
+    private HttpResponse doPostMultiPartWrapper(String url, Map<String, ContentBody> postData, String requestEncoding, String responseEncoding, Map<String, String> headerMap, SiteProxyIp proxyIp) throws HttpException, IOException {
 
-        com.jeeframework.util.httpclient.v4.HttpResponse httpResponse = new com.jeeframework.util.httpclient.v4.HttpResponse();
+        HttpResponse httpResponse = new HttpResponse();
         httpResponse.setRequestEncode(requestEncoding);
         httpResponse.setResponseEncode(responseEncoding);
         httpResponse.setRequestUrl(url);
@@ -764,7 +764,7 @@ public class HttpClientHelper {
         return httpResponse;
     }
 
-    public com.jeeframework.util.httpclient.v4.HttpResponse doPostString(String url, String stringEntity, String requestEncoding,
+    public HttpResponse doPostString(String url, String stringEntity, String requestEncoding,
                                      String responseEncoding, Map<String, String> headerMap, SiteProxyIp proxyIp)
             throws HttpException, IOException {
         int retryTimes = 0;
@@ -781,7 +781,7 @@ public class HttpClientHelper {
     }
 
 
-    public com.jeeframework.util.httpclient.v4.HttpResponse doPostStringAndRetBytes(String url, String stringEntity, String requestEncoding,
+    public HttpResponse doPostStringAndRetBytes(String url, String stringEntity, String requestEncoding,
                                                 String responseEncoding, Map<String, String> headerMap, SiteProxyIp proxyIp)
             throws HttpException, IOException {
         int retryTimes = 0;
@@ -797,9 +797,9 @@ public class HttpClientHelper {
         }
     }
 
-    private com.jeeframework.util.httpclient.v4.HttpResponse doPostStringWrapper(String url, String stringEntity, String requestEncoding, String responseEncoding, Map<String, String> headerMap, SiteProxyIp proxyIp, int responseType) throws HttpException, IOException {
+    private HttpResponse doPostStringWrapper(String url, String stringEntity, String requestEncoding, String responseEncoding, Map<String, String> headerMap, SiteProxyIp proxyIp, int responseType) throws HttpException, IOException {
 
-        com.jeeframework.util.httpclient.v4.HttpResponse httpResponse = new com.jeeframework.util.httpclient.v4.HttpResponse();
+        HttpResponse httpResponse = new HttpResponse();
         httpResponse.setRequestEncode(requestEncoding);
         httpResponse.setResponseEncode(responseEncoding);
         httpResponse.setRequestUrl(url);
@@ -914,7 +914,7 @@ public class HttpClientHelper {
                                 responseBytes = readStreamToBytes(charset, inStream);
                             }
                             httpResponse.setContentBytes(responseBytes);
-                            httpResponse.setContentType(com.jeeframework.util.httpclient.v4.HttpResponse.CONTENT_TYPE_BYTE);
+                            httpResponse.setContentType(HttpResponse.CONTENT_TYPE_BYTE);
                         } else {
 
                             if (acceptEncoding != null && acceptEncoding.toLowerCase().indexOf("gzip") > -1) {
@@ -971,7 +971,7 @@ public class HttpClientHelper {
     }
 
 
-    public com.jeeframework.util.httpclient.v4.HttpResponse doPostBytes(String url, byte[] bytesEntity, String requestEncoding,
+    public HttpResponse doPostBytes(String url, byte[] bytesEntity, String requestEncoding,
                                     String responseEncoding, Map<String, String> headerMap, SiteProxyIp proxyIp)
             throws HttpException, IOException {
         int retryTimes = 0;
@@ -987,7 +987,7 @@ public class HttpClientHelper {
         }
     }
 
-    public com.jeeframework.util.httpclient.v4.HttpResponse doPostBytesAndRetBytes(String url, byte[] bytesEntity, String requestEncoding,
+    public HttpResponse doPostBytesAndRetBytes(String url, byte[] bytesEntity, String requestEncoding,
                                                String responseEncoding, Map<String, String> headerMap, SiteProxyIp proxyIp)
             throws HttpException, IOException {
         int retryTimes = 0;
@@ -1004,9 +1004,9 @@ public class HttpClientHelper {
     }
 
 
-    private com.jeeframework.util.httpclient.v4.HttpResponse doPostBytesWrapper(String url, byte[] bytesEntity, String requestEncoding, String responseEncoding, Map<String, String> headerMap, SiteProxyIp proxyIp, int responseType) throws HttpException, IOException {
+    private HttpResponse doPostBytesWrapper(String url, byte[] bytesEntity, String requestEncoding, String responseEncoding, Map<String, String> headerMap, SiteProxyIp proxyIp, int responseType) throws HttpException, IOException {
 
-        com.jeeframework.util.httpclient.v4.HttpResponse httpResponse = new com.jeeframework.util.httpclient.v4.HttpResponse();
+        HttpResponse httpResponse = new HttpResponse();
         httpResponse.setRequestEncode(requestEncoding);
         httpResponse.setResponseEncode(responseEncoding);
         httpResponse.setRequestUrl(url);
@@ -1119,7 +1119,7 @@ public class HttpClientHelper {
                                 responseBytes = readStreamToBytes(charset, inStream);
                             }
                             httpResponse.setContentBytes(responseBytes);
-                            httpResponse.setContentType(com.jeeframework.util.httpclient.v4.HttpResponse.CONTENT_TYPE_BYTE);
+                            httpResponse.setContentType(HttpResponse.CONTENT_TYPE_BYTE);
                         } else {
 
                             if (acceptEncoding != null && acceptEncoding.toLowerCase().indexOf("gzip") > -1) {
@@ -1394,7 +1394,7 @@ public class HttpClientHelper {
         Map<String, String> headerMap = new HashMap<String, String>();
         headerMap.put("X-Requested-With", "com.JEEFRAMEWORK.mm");
         headerMap.put("User-Agent", "Mozilla/5.0 (Linux; U; Android 4.3; zh-cn; Galaxy Nexus Build /JWR66Y) AppleWebKit/534.30 (KHTML, like Gecko) Version/4.0 Mobile Safari/534.30 MicroMessenger/5.3.1.51_r733746.462 NetType/WIFI");
-        com.jeeframework.util.httpclient.v4.HttpResponse htmlContent = httpClientHelper.doGet("http://mp.weixin.qq.com/s?__biz=MzA3ODQ1NjYyOQ==&mid=201970220&idx=1&sn=8301e46b6a2684ecf46a32c2cb310463&3rd=MzA3MDU4NTYzMw==&scene=6#rd", "utf-8", "utf-8", headerMap, null);
+        HttpResponse htmlContent = httpClientHelper.doGet("http://mp.weixin.qq.com/s?__biz=MzA3ODQ1NjYyOQ==&mid=201970220&idx=1&sn=8301e46b6a2684ecf46a32c2cb310463&3rd=MzA3MDU4NTYzMw==&scene=6#rd", "utf-8", "utf-8", headerMap, null);
 
         System.out.println(htmlContent.getContent());
     }
@@ -1409,7 +1409,7 @@ public class HttpClientHelper {
 
         postDatarMap.put("srchtxt", "a");
         postDatarMap.put("searchsubmit", "yes");
-        com.jeeframework.util.httpclient.v4.HttpResponse htmlContent = httpClientHelper.doPost("http://www.discuz.net/search.php?mod=portal", postDatarMap, "utf-8", "utf-8", headerMap, null);
+        HttpResponse htmlContent = httpClientHelper.doPost("http://www.discuz.net/search.php?mod=portal", postDatarMap, "utf-8", "utf-8", headerMap, null);
 
     }
 }
