@@ -24,6 +24,16 @@ public class BizException extends BaseException
         this.errMsgForView = msg;
     }
 
+    public BizException(int errorCode)
+    {
+        super("");
+        this.errorCode = errorCode;
+    }
+
+    public BizException(int errorCode, Throwable cause){
+        super(cause);
+        this.errorCode = errorCode;
+    }
     /**
      * @param errorCode
      * @param msg
