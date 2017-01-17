@@ -19,8 +19,6 @@ import com.jeeframework.util.resource.ResolverUtil;
 import com.jeeframework.util.string.StringUtils;
 import com.jeeframework.util.validate.Validate;
 import org.apache.commons.lang.SystemUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.config.AutowireCapableBeanFactory;
 import org.springframework.beans.factory.support.DefaultListableBeanFactory;
 import org.springframework.beans.factory.support.RootBeanDefinition;
@@ -41,7 +39,7 @@ import java.util.*;
  */
 public class JeeFrameWorkServer {
 
-    private static final Logger Log = LoggerFactory.getLogger(HttpServer.class);
+//    private static final Logger Log = LoggerFactory.getLogger(HttpServer.class);
 
     public static final String SERVER_CONFIG_FILE = "server.ini";
     private static JeeProperties serverProperties = null;
