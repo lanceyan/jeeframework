@@ -70,7 +70,6 @@ public class JeeFrameWorkServer {
     }
 
     public void start() {
-        serverProperties = new JeeProperties(SERVER_CONFIG_FILE, false);
 
 
 //        -Dlog.dir=d:\log\guanv
@@ -178,6 +177,9 @@ public class JeeFrameWorkServer {
         } else {
             System.setProperty("run.log.additivity", "false");
         }
+
+
+        serverProperties = new JeeProperties(SERVER_CONFIG_FILE, false);
 
         httpServer = new HttpServer();
         httpServer.start();
