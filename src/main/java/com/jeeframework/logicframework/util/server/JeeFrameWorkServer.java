@@ -246,7 +246,7 @@ public class JeeFrameWorkServer {
                             }
                         }
                     } catch (IOException e) {
-                        Log.debug("Loaded action configuration from:getAllResource()");
+                        System.out.println("Loaded action configuration from:getAllResource()");
                     }
 
 //                    String[] resourceNames = PathMatchingResourcePatternResolverWrapper.getAllResource(name);
@@ -271,7 +271,7 @@ public class JeeFrameWorkServer {
 
             String beanName = StringUtils.uncapitalize(cls.getSimpleName());
 
-            System.out.println("beanName   " + beanName + "   loaded in context! ");
+            System.out.println("Net action class  beanName   " + beanName + " has  loaded in context! ");
             beanFactory.registerBeanDefinition(beanName, def);
 
 
