@@ -94,7 +94,7 @@ public class JeeFrameWorkServer {
             if (SystemUtils.IS_OS_WINDOWS) {
                 dirArrays = new String[]{"d:", "e:", "f:", "g:", "c:"};
             } else if (SystemUtils.IS_OS_MAC || SystemUtils.IS_OS_MAC_OSX) {
-
+                dirArrays = new String[]{"/tmp/log", "/var/log"};
             } else if (SystemUtils.IS_OS_LINUX || SystemUtils.IS_OS_UNIX) {
                 dirArrays = new String[]{"/tmp/log", "/var/log"};
             }
