@@ -51,11 +51,11 @@ public class LoggerUtil {
             try {
                 log4j2xml = ResourceUtils.getFile("classpath:" + log4j2File);
             } catch (FileNotFoundException e) {
-                System.out.println("根据host没有找到log4j2的配置文件，" + log4j2File + "，使用log4j2默认加载方式");
+                System.out.println("根据 -Dconf.env  没有找到log4j2的配置文件，" + log4j2File + "，使用log4j2默认加载方式");
             }
 
             if (log4j2xml != null) {
-                System.out.println("根据host找到log4j2的配置文件，" + log4j2xml.getAbsolutePath());
+                System.out.println("根据 -Dconf.env  找到log4j2的配置文件，" + log4j2xml.getAbsolutePath());
                 System.setProperty("log4j.configurationFile", "file:///" +log4j2xml.getAbsolutePath());
                 //重新初始化Log4j2的配置上下文
                 LoggerContext context = (LoggerContext) LogManager.getContext(false);
