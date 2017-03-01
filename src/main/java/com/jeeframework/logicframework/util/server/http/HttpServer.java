@@ -22,6 +22,7 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.web.context.support.WebApplicationContextUtils;
 
 import javax.servlet.ServletContext;
+import java.io.File;
 import java.io.IOException;
 
 public final class HttpServer {
@@ -68,7 +69,7 @@ public final class HttpServer {
         if (Validate.isEmpty(path)) {
             throw new BaseException("没有找到web.xml");
         }
-        webroot = StringUtils.substringBefore(path, "WEB-INF");
+        webroot = StringUtils.substringBefore(path, File.separator + "WEB-INF");
     }
 
     public int getHttpBindUnsecurePort() {
@@ -89,8 +90,7 @@ public final class HttpServer {
 
             if (applicationContext == null) {
                 Log.error("Web应用中没有配置spring，初始化applicationContext失败！");
-            }
-            else {
+            } else {
                 SpringContextHolder.setApplicationContextByStatic(applicationContext);
             }
 

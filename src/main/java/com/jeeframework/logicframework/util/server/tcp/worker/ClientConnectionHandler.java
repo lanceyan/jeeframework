@@ -8,6 +8,7 @@
  */
 package com.jeeframework.logicframework.util.server.tcp.worker;
 
+import com.jeeframework.logicframework.util.server.tcp.MinaTcpServer;
 import com.jeeframework.logicframework.util.server.tcp.protocol.NetData;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -23,18 +24,21 @@ import org.apache.mina.core.session.IoSession;
  */
 public class ClientConnectionHandler extends IoHandlerAdapter {
     /*
-	 * 工作子线程
+     * 工作子线程
 	 */
     private Log logger = LogFactory.getLog(ClientConnectionHandler.class);
     private ClientConnectionWorker[] clientConnectionWorkers;
+    private MinaTcpServer minaTcpServer;
 
-    public ClientConnectionHandler(int workscount) {
+    public ClientConnectionHandler(MinaTcpServer minaTcpServer, int workscount) {
         super();
+
+        this.minaTcpServer = minaTcpServer;
 
         // 创建线程组
         clientConnectionWorkers = new ClientConnectionWorker[workscount];
         for (int i = 0; i < clientConnectionWorkers.length; i++) {
-            clientConnectionWorkers[i] = new ClientConnectionWorker();
+            clientConnectionWorkers[i] = new ClientConnectionWorker(this.minaTcpServer);
             clientConnectionWorkers[i].setDaemon(true); // 父线程的子线程存在，当父线程退出时，子线程也可以退出
             clientConnectionWorkers[i].start();
         }
@@ -61,7 +65,7 @@ public class ClientConnectionHandler extends IoHandlerAdapter {
             return;
 
         // 输出异常
-        logger.error("ClientConnectionHandler.exceptionCaught",cause);
+        logger.error("ClientConnectionHandler.exceptionCaught", cause);
 
     }
 

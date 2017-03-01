@@ -9,8 +9,8 @@
 package com.jeeframework.logicframework.util.server.tcp.worker;
 
 import com.jeeframework.core.exception.BaseException;
-import com.jeeframework.logicframework.util.server.JeeFrameWorkServer;
 import com.jeeframework.logicframework.util.server.tcp.BaseNetController;
+import com.jeeframework.logicframework.util.server.tcp.MinaTcpServer;
 import com.jeeframework.logicframework.util.server.tcp.protocol.NetData;
 import com.jeeframework.logicframework.util.server.tcp.protocol.ProtocolParser;
 import com.jeeframework.util.io.BSPkgHead;
@@ -30,7 +30,13 @@ public class ClientConnectionWorker extends Thread {
      * 网络事件队列
 	 */
     private Vector<MinaDataEvent> eventQueue = new Vector<MinaDataEvent>();
+    private MinaTcpServer minaTcpServer;
+    private ApplicationContext applicationContext;
 
+    public ClientConnectionWorker(MinaTcpServer minaTcpServer) {
+        this.minaTcpServer = minaTcpServer;
+        applicationContext = this.minaTcpServer.getApplicationContext();
+    }
 
     /**
      * 向网络事件队列中增加一个消息
@@ -66,7 +72,6 @@ public class ClientConnectionWorker extends Thread {
                 // 获取一个网络层controller的处理类
                 String controllerName = ProtocolParser.getBaseNetControllerByCmdId(cmdId);
 
-                ApplicationContext applicationContext = JeeFrameWorkServer.getInstance().getApplicationContext();
 
                 // 直接调用类的对应服务
                 try {

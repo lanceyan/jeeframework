@@ -189,14 +189,6 @@ public abstract class BaseAction extends ActionSupport {
 		this.mapSession = mapSession;
 	}
 
-	/**
-	 * 抽象类，子类实现获取当前子类实例的个数。
-	 * 
-	 * 之所以是抽象方法，是因为要用于在子类实现，获取具体子类的个数。
-	 * 
-	 * @return 返回当前实现类的具体的个数。
-	 */
-	public abstract int getObjCount();
 
 	/**
 	 * 获取struts的ActionContext。 为了使代码与struts解耦，不建议使用。

@@ -170,4 +170,8 @@ public abstract class BaseDaoiBATIS implements ContextManageBean {
         });
     }
 
+    public void afterPropertiesSet() throws Exception {
+        // TODO Auto-generated method stub
+
+    }
 }

@@ -15,12 +15,6 @@ public class BaseException extends RuntimeException {
 
     protected String errorMessage = null; // 错误消息默认为null
 
-    protected String errMsgForView = null; // 显示在页面上的错误消息，带格式化的字符串
-
-    protected String errorMessageFmt = null; // 格式化后的字符串
-
-    protected String errMsgForViewFmt = null; // 显示在页面上的格式化后的字符串
-
     /**
      * @param errorCode
      * @param msg       设置错误消息，并设置errorMessage/errMsgForView为msg
@@ -29,7 +23,6 @@ public class BaseException extends RuntimeException {
         super(msg);
         this.errorMessage = msg;
         this.errorCode = errorCode;
-        this.errMsgForView = msg;
     }
 
     /**
@@ -41,7 +34,6 @@ public class BaseException extends RuntimeException {
         super(msg);
         this.errorMessage = msg;
         this.errorCode = errorCode;
-        this.errMsgForView = msgForView;
     }
 
     /**
@@ -51,7 +43,6 @@ public class BaseException extends RuntimeException {
     public BaseException(String msg, String msgForView) {
         super(msg);
         this.errorMessage = msg;
-        this.errMsgForView = msgForView;
     }
 
     /**
@@ -60,7 +51,6 @@ public class BaseException extends RuntimeException {
     public BaseException(String msg) {
         super(msg);
         this.errorMessage = msg;
-        this.errMsgForView = msg;
     }
 
     /**
@@ -72,7 +62,6 @@ public class BaseException extends RuntimeException {
         super(msg, cause);
         this.errorMessage = msg;
         this.errorCode = errorCode;
-        this.errMsgForView = msg;
     }
 
     /**
@@ -82,7 +71,6 @@ public class BaseException extends RuntimeException {
     public BaseException(String msg, Throwable cause) {
         super(msg, cause);
         this.errorMessage = msg;
-        this.errMsgForView = msg;
         if (cause instanceof BaseException) {
             this.errorCode = ((BaseException) cause).getErrorCode();
         }
@@ -107,14 +95,11 @@ public class BaseException extends RuntimeException {
     }
 
     /**
-     * 得到当前的错误消息。 如果带格式的错误信息errMsgForViewFmt为空，则直接显示错误信息errMsgForView。
+     * 得到当前的错误消息。
      *
-     * @return errMsgForView 需要显示给用户的信息。
+     * @return errorMessage
      */
     public String getErrorMessage() {
-        if (errorMessageFmt != null) {
-            return errorMessageFmt;
-        }
         return errorMessage;
     }
 
@@ -122,45 +107,6 @@ public class BaseException extends RuntimeException {
         this.errorMessage = errorMessage;
     }
 
-    /**
-     * 得到当前的错误消息（显示给用户)。 如果带格式的错误信息errMsgForViewFmt为空，则直接显示错误信息errMsgForView。
-     *
-     * @return errMsgForView 需要显示给用户的信息。
-     */
-    public String getErrMsgForView() {
-        if (errMsgForViewFmt != null) {
-            return errMsgForViewFmt;
-        }
-        return errMsgForView;
-    }
-
-    public void setErrMsgForView(String errMsgForView) {
-        this.errMsgForView = errMsgForView;
-    }
-
-    /**
-     * 设置带格式的message的参数进行替换显示
-     *
-     * @param args 格式化消息串
-     */
-    public void setErrMsgForViewArgs(Object... args) {
-        if (errMsgForView == null) {
-            throw new BaseException("设置格式化参数时，请先设置errMsgForView为带格式化的字符串！");
-        }
-        errMsgForViewFmt = String.format(errMsgForView, args);
-    }
-
-    /**
-     * 设置带格式的message的参数进行替换
-     *
-     * @param args 格式化消息串
-     */
-    public void setErrorMessageArgs(Object... args) {
-        if (errorMessage == null) {
-            throw new BaseException("设置格式化参数时，请先设置errorMessage为带格式化的字符串！");
-        }
-        errorMessageFmt = String.format(errorMessage, args);
-    }
 
 //    public static void main(String[] args)
 //    {

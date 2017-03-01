@@ -10,11 +10,7 @@
 
 package com.jeeframework.logicframework.integration;
 
-import com.jeeframework.logicframework.integration.error.ErrorInfo;
-
-
-
-/** 
+/**
  * ���ɲ����ݷ��񹫹��ӿ�
  * @author lanceyan�������޸��ߣ�
  * @version 1.0���°汾�ţ�
@@ -23,11 +19,7 @@ import com.jeeframework.logicframework.integration.error.ErrorInfo;
 
 public interface DataService
 {
-    /**
-     * ��ȡ��ǰ�������Ĵ�����Ϣ
-     * @return ErrorInfo ��������Ϣ
-     */
-    public  ErrorInfo getLastErrorInfo();
+
 }
 
 
