@@ -8,7 +8,6 @@
  */
 package com.jeeframework.testframework;
 
-import com.jeeframework.core.context.support.SpringContextHolder;
 import com.jeeframework.logicframework.util.server.JeeFrameWorkServer;
 import com.jeeframework.logicframework.util.server.tcp.MinaTcpServer;
 import com.jeeframework.util.properties.JeeProperties;
@@ -16,19 +15,11 @@ import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.runner.RunWith;
-import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.ContextHierarchy;
 import org.springframework.test.context.junit4.AbstractTransactionalJUnit4SpringContextTests;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.test.context.transaction.TransactionConfiguration;
 import org.springframework.test.context.web.WebAppConfiguration;
-import org.springframework.transaction.annotation.Transactional;
-
-import javax.annotation.Resource;
-import javax.sql.DataSource;
-
-import static com.jeeframework.logicframework.util.server.JeeFrameWorkServer.SERVER_CONFIG_FILE;
 
 /**
  * Spring 组件测试类
@@ -42,8 +33,6 @@ import static com.jeeframework.logicframework.util.server.JeeFrameWorkServer.SER
         @ContextConfiguration(locations = {"classpath:config/biz-context-core.xml"}),
         @ContextConfiguration(locations = {"classpath:config/conf-spring/biz-context-*.xml"})
 })
-@Transactional
-@TransactionConfiguration(transactionManager = "transactionManager", defaultRollback = true)
 public abstract class AbstractMinaBaseTest extends AbstractTransactionalJUnit4SpringContextTests {
 
 
@@ -52,7 +41,6 @@ public abstract class AbstractMinaBaseTest extends AbstractTransactionalJUnit4Sp
         System.out.println("Test beforeSetUp...");
 
         setTestEnv();
-
 
 
     }
@@ -73,10 +61,5 @@ public abstract class AbstractMinaBaseTest extends AbstractTransactionalJUnit4Sp
     @AfterClass
     public static void tearUp() {
         System.out.println("Test end!");
-    }
-
-    @Resource(name = "dsFactory")
-    public void setDataSource(DataSource dataSource) {
-        this.jdbcTemplate = new JdbcTemplate(dataSource);
     }
 }

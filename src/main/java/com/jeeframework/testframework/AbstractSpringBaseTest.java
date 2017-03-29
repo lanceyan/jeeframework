@@ -13,17 +13,11 @@ import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.runner.RunWith;
-import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.ContextHierarchy;
 import org.springframework.test.context.junit4.AbstractTransactionalJUnit4SpringContextTests;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.test.context.transaction.TransactionConfiguration;
 import org.springframework.test.context.web.WebAppConfiguration;
-import org.springframework.transaction.annotation.Transactional;
-
-import javax.annotation.Resource;
-import javax.sql.DataSource;
 
 /**
  * Spring 组件测试类
@@ -37,8 +31,6 @@ import javax.sql.DataSource;
         @ContextConfiguration(locations = {"classpath:config/biz-context-core.xml"}),
         @ContextConfiguration(locations = {"classpath:config/conf-spring/biz-context-*.xml"})
 })
-@Transactional
-@TransactionConfiguration(transactionManager = "transactionManager", defaultRollback = true)
 public abstract class AbstractSpringBaseTest extends AbstractTransactionalJUnit4SpringContextTests {
 
 
@@ -65,8 +57,5 @@ public abstract class AbstractSpringBaseTest extends AbstractTransactionalJUnit4
         System.out.println("Test end!");
     }
 
-    @Resource(name = "dsFactory")
-    public void setDataSource(DataSource dataSource) {
-        this.jdbcTemplate = new JdbcTemplate(dataSource);
-    }
+
 }

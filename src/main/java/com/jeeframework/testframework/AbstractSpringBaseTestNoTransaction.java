@@ -8,19 +8,16 @@
  */
 package com.jeeframework.testframework;
 
+import com.jeeframework.logicframework.util.server.JeeFrameWorkServer;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.runner.RunWith;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.ContextHierarchy;
-import org.springframework.test.context.junit4.AbstractTransactionalJUnit4SpringContextTests;
+import org.springframework.test.context.junit4.AbstractJUnit4SpringContextTests;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
-import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-import org.springframework.web.context.WebApplicationContext;
 
 /**
  * Spring 组件测试类
@@ -32,27 +29,26 @@ import org.springframework.web.context.WebApplicationContext;
 @WebAppConfiguration
 @ContextHierarchy({
         @ContextConfiguration(locations = {"classpath:config/biz-context-core.xml"}),
-        @ContextConfiguration(locations = {"classpath:config/conf-spring/biz-context-*.xml", "classpath:config/dispatcher-servlet.xml"})
+        @ContextConfiguration(locations = {"classpath:config/conf-spring/biz-context-*.xml"})
 })
-public abstract class AbstractSpringBaseControllerTest extends AbstractTransactionalJUnit4SpringContextTests {
-    @Autowired
-    protected WebApplicationContext wac;
+public abstract class AbstractSpringBaseTestNoTransaction  extends AbstractJUnit4SpringContextTests {
 
-    protected MockMvc mockMvc;
 
     @BeforeClass
     public static void beforeSetUp() {
         System.out.println("Test beforeSetUp...");
 
-        AbstractSpringBaseTest.setTestEnv();
+        setTestEnv();
 
     }
 
+    public static void setTestEnv() {
+        JeeFrameWorkServer.initEnvVariables();
+    }
 
     @Before
     public void setUp() {
         System.out.println("Test start...");
-        mockMvc = MockMvcBuilders.webAppContextSetup(wac).build();
     }
 
 
