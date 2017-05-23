@@ -8,6 +8,7 @@
  */
 package com.jeeframework.webframework.controller;
 
+import com.jeeframework.util.validate.Validate;
 import org.springframework.core.MethodParameter;
 import org.springframework.http.MediaType;
 import org.springframework.http.converter.HttpMessageConverter;
@@ -26,7 +27,9 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseBodyAdvice;
 @ControllerAdvice
 public class JSONResponseBodyAdvice implements ResponseBodyAdvice<Object> {
     @Override
-    public Object beforeBodyWrite(Object body, MethodParameter returnType, MediaType selectedContentType, Class<? extends HttpMessageConverter<?>> selectedConverterType, ServerHttpRequest request, ServerHttpResponse response) {
+    public Object beforeBodyWrite(Object body, MethodParameter returnType, MediaType selectedContentType, Class<?
+            extends HttpMessageConverter<?>> selectedConverterType, ServerHttpRequest request, ServerHttpResponse
+                                          response) {
 
 
         DataResponse dataResponse = new DataResponse();
@@ -43,6 +46,14 @@ public class JSONResponseBodyAdvice implements ResponseBodyAdvice<Object> {
         String className = methodParameter.getMethod().getDeclaringClass().getName();
 
         if (className.startsWith("com.mangofactory.swagger")) {
+            return false;
+        }
+        String notWrapperClassNames = null;
+        try {
+            notWrapperClassNames = System.getProperty("notWrapper.classNames");
+        } catch (Exception e) {
+        }
+        if (!Validate.isEmpty(notWrapperClassNames) && className.startsWith(notWrapperClassNames)) {
             return false;
         }
 
