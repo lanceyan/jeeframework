@@ -31,8 +31,8 @@ import java.util.List;
  */
 public class BaseSaoHDFS extends BaseSAO {
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
+    FileSystem fileSystem = null;
 
-    Configuration configuration = new Configuration();
     private String hdfsAddress; //hdfs 服务器地址
     private String userName; //hadoop执行用户
 
@@ -46,30 +46,32 @@ public class BaseSaoHDFS extends BaseSAO {
     public void uploadFile(byte[] fileBytes, String hadoopPath) throws SAOException {
 
 
-        FileSystem fileSystem = null;
         FSDataOutputStream fsDataOutputStream = null;
         try {
-            fileSystem = FileSystem.get(URI.create(hdfsAddress), configuration);
+//            fileSystem = FileSystem.get(URI.create(hdfsAddress), configuration);
 
             Path path = new Path(hadoopPath);
             fsDataOutputStream = fileSystem.create(path);
             fsDataOutputStream.write(fileBytes);
-            fsDataOutputStream.close();
+            if (fsDataOutputStream != null) {
+                fsDataOutputStream.close();
+            }
         } catch (IOException e) {
             throw new SAOException("上传到远程文件  " + hadoopPath + " 出错。 ", e);
-        } finally {
-            try {
-                if (fileSystem != null) {
-                    fileSystem.close();
-                }
-                if (fsDataOutputStream != null) {
-                    fsDataOutputStream.close();
-                }
-            } catch (IOException e) {
-                throw new SAOException("上传后关闭文件流出错。 ", e);
-            } finally {
-            }
         }
+//        finally {
+//            try {
+//                if (fileSystem != null) {
+//                    fileSystem.close();
+//                }
+//                if (fsDataOutputStream != null) {
+//                    fsDataOutputStream.close();
+//                }
+//            } catch (IOException e) {
+//                throw new SAOException("上传后关闭文件流出错。 ", e);
+//            } finally {
+//            }
+//        }
     }
 
     /**
@@ -81,7 +83,7 @@ public class BaseSaoHDFS extends BaseSAO {
     public void uploadFile(String localPath, String hadoopPath) throws SAOException {
 
         FSDataOutputStream fsDataOutputStream = null;
-        FileSystem fileSystem = null;
+//        FileSystem fileSystem = null;
         FileInputStream fileInputStream = null;
 
         try {
@@ -90,27 +92,34 @@ public class BaseSaoHDFS extends BaseSAO {
                 throw new FileNotFoundException(localPath + "  本地文件不存在");
             }
             fileInputStream = new FileInputStream(localPath);
-            fileSystem = FileSystem.get(URI.create(hdfsAddress), configuration);
+//            fileSystem = FileSystem.get(URI.create(hdfsAddress), configuration);
             fsDataOutputStream = fileSystem.create(new Path(hadoopPath));
             IOUtils.copyBytes(fileInputStream, fsDataOutputStream, 4096, false);
+            if (fileInputStream != null) {
+                fileInputStream.close();
+            }
+            if (fsDataOutputStream != null) {
+                fsDataOutputStream.close();
+            }
         } catch (IOException e) {
             throw new SAOException(localPath + "上传到远程文件  " + hadoopPath + " 出错。 ", e);
-        } finally {
-            try {
-                if (fileSystem != null) {
-                    fileSystem.close();
-                }
-                if (fileInputStream != null) {
-                    fileInputStream.close();
-                }
-                if (fsDataOutputStream != null) {
-                    fsDataOutputStream.close();
-                }
-            } catch (IOException e) {
-                throw new SAOException("上传后关闭文件流出错。 ", e);
-            } finally {
-            }
         }
+//        finally {
+//            try {
+//                if (fileSystem != null) {
+//                    fileSystem.close();
+//                }
+//                if (fileInputStream != null) {
+//                    fileInputStream.close();
+//                }
+//                if (fsDataOutputStream != null) {
+//                    fsDataOutputStream.close();
+//                }
+//            } catch (IOException e) {
+//                throw new SAOException("上传后关闭文件流出错。 ", e);
+//            } finally {
+//            }
+//        }
     }
 
     /**
@@ -120,34 +129,42 @@ public class BaseSaoHDFS extends BaseSAO {
      * @param localPath  本地文件路径
      */
     public void downloadFile(String hadoopPath, String localPath) throws SAOException {
-        FileSystem fs = null;
+//        FileSystem fileSystem = null;
         FSDataInputStream in = null;
         OutputStream out = null;
         try {
-            fs = FileSystem.get(URI.create(hdfsAddress), configuration);
+//            fs = FileSystem.get(URI.create(hdfsAddress), configuration);
             Path fileName2 = new Path(hadoopPath);
-            checkFileExists(fs, fileName2);
-            in = fs.open(fileName2);
+            checkFileExists(fileSystem, fileName2);
+            in = fileSystem.open(fileName2);
             out = new BufferedOutputStream(new FileOutputStream(localPath));
             IOUtils.copyBytes(in, out, 1024, true);
+            if (in != null) {
+                in.close();
+            }
+            if (out != null) {
+                out.flush();
+                out.close();
+            }
         } catch (IOException e) {
             throw new SAOException("下载远程文件  " + hadoopPath + " 出错。 ", e);
-        } finally {
-            try {
-                if (in != null) {
-                    in.close();
-                }
-                if (out != null) {
-                    out.flush();
-                    out.close();
-                }
-                if (fs != null) {
-                    fs.close();
-                }
-            } catch (Exception e) {
-                throw new SAOException("下载远程文件后关闭文件流  " + hadoopPath + " 出错。 ", e);
-            }
         }
+//        finally {
+//            try {
+//                if (in != null) {
+//                    in.close();
+//                }
+//                if (out != null) {
+//                    out.flush();
+//                    out.close();
+//                }
+//                if (fs != null) {
+//                    fs.close();
+//                }
+//            } catch (Exception e) {
+//                throw new SAOException("下载远程文件后关闭文件流  " + hadoopPath + " 出错。 ", e);
+//            }
+//        }
     }
 
     /**
@@ -157,36 +174,38 @@ public class BaseSaoHDFS extends BaseSAO {
      * @return
      */
     public byte[] downloadFile(String hadoopPath) throws SAOException {
-        FileSystem fs = null;
+//        FileSystem fs = null;
         FSDataInputStream in = null;
         ByteArrayOutputStream out = null;
         byte[] retBytes;
         try {
-            fs = FileSystem.get(URI.create(hdfsAddress), configuration);
+//            fs = FileSystem.get(URI.create(hdfsAddress), configuration);
             Path fileName2 = new Path(hadoopPath);
-            checkFileExists(fs, fileName2);
-            in = fs.open(fileName2);
+            checkFileExists(fileSystem, fileName2);
+            in = fileSystem.open(fileName2);
             out = new ByteArrayOutputStream();
             IOUtils.copyBytes(in, out, 1024, true);
             retBytes = out.toByteArray();
+            if (in != null) {
+                in.close();
+            }
+            if (out != null) {
+                out.flush();
+                out.close();
+            }
         } catch (IOException e) {
             throw new SAOException("下载远程文件  " + hadoopPath + " 出错。 ", e);
-        } finally {
-            try {
-                if (in != null) {
-                    in.close();
-                }
-                if (out != null) {
-                    out.flush();
-                    out.close();
-                }
-                if (fs != null) {
-                    fs.close();
-                }
-            } catch (Exception e) {
-                throw new SAOException("下载远程文件后关闭文件流  " + hadoopPath + " 出错。 ", e);
-            }
         }
+//        finally {
+//            try {
+//
+//                if (fileSystem != null) {
+//                    fileSystem.close();
+//                }
+//            } catch (Exception e) {
+//                throw new SAOException("下载远程文件后关闭文件流  " + hadoopPath + " 出错。 ", e);
+//            }
+//        }
         return retBytes;
     }
 
@@ -197,24 +216,25 @@ public class BaseSaoHDFS extends BaseSAO {
      * @return
      */
     public boolean mkDirs(String hadoopPath) {
-        FileSystem fileSystem = null;
+//        FileSystem fileSystem = null;
         boolean result = false;
         try {
-            fileSystem = FileSystem.get(URI.create(hdfsAddress), configuration);
+//            fileSystem = FileSystem.get(URI.create(hdfsAddress), configuration);
             result = fileSystem.mkdirs(new Path(hadoopPath));
         } catch (IOException e) {
             throw new SAOException("创建目录出错。 ", e);
-        } finally {
-            try {
-                if (fileSystem != null) {
-                    fileSystem.close();
-                }
-            } catch (IOException e) {
-                throw new SAOException("创建目录关闭文件流出错。 ", e);
-            } finally {
-            }
-            return result;
         }
+//        finally {
+//            try {
+//                if (fileSystem != null) {
+//                    fileSystem.close();
+//                }
+//            } catch (IOException e) {
+//                throw new SAOException("创建目录关闭文件流出错。 ", e);
+//            } finally {
+//            }
+//        }
+        return result;
     }
 
     /**
@@ -226,10 +246,10 @@ public class BaseSaoHDFS extends BaseSAO {
      */
     public List<String> listFiles(String hadoopFolderPath) throws SAOException {
         Path path = new Path(hadoopFolderPath);
-        FileSystem fileSystem = null;
+//        FileSystem fileSystem = null;
         List<String> paths = new ArrayList<>();
         try {
-            fileSystem = FileSystem.get(URI.create(this.hdfsAddress), configuration);
+//            fileSystem = FileSystem.get(URI.create(this.hdfsAddress), configuration);
             checkFileExists(fileSystem, path);
 
             if (fileSystem.exists(path)) {
@@ -250,16 +270,17 @@ public class BaseSaoHDFS extends BaseSAO {
             }
         } catch (IOException e) {
             throw new SAOException("listFiles  " + hadoopFolderPath + " 出错。 ", e);
-        } finally {
-            try {
-                if (fileSystem != null) {
-                    fileSystem.close();
-                }
-            } catch (IOException e) {
-                throw new SAOException("listFiles关闭文件流出错。 ", e);
-            } finally {
-            }
         }
+//        finally {
+//            try {
+//                if (fileSystem != null) {
+//                    fileSystem.close();
+//                }
+//            } catch (IOException e) {
+//                throw new SAOException("listFiles关闭文件流出错。 ", e);
+//            } finally {
+//            }
+//        }
         return paths;
     }
 
@@ -270,24 +291,25 @@ public class BaseSaoHDFS extends BaseSAO {
      * @return
      */
     public boolean existsFile(String hadoopPath) throws SAOException {
-        FileSystem fileSystem = null;
+//        FileSystem fileSystem = null;
         boolean result = false;
         try {
-            fileSystem = FileSystem.get(URI.create(hdfsAddress), configuration);
+//            fileSystem = FileSystem.get(URI.create(hdfsAddress), configuration);
             result = fileSystem.exists(new Path(hadoopPath));
         } catch (IOException e) {
             throw new SAOException("检查文件存在出错。 ", e);
-        } finally {
-            try {
-                if (fileSystem != null) {
-                    fileSystem.close();
-                }
-            } catch (IOException e) {
-                throw new SAOException("检查文件存在关闭文件流出错。 ", e);
-            } finally {
-            }
-            return result;
         }
+//        finally {
+//            try {
+//                if (fileSystem != null) {
+//                    fileSystem.close();
+//                }
+//            } catch (IOException e) {
+//                throw new SAOException("检查文件存在关闭文件流出错。 ", e);
+//            } finally {
+//            }
+//        }
+        return result;
     }
 
 
@@ -300,10 +322,10 @@ public class BaseSaoHDFS extends BaseSAO {
      */
     public boolean renameFile(String oldHadoopFile, String newHadoopFile) throws SAOException {
 
-        FileSystem fileSystem = null;
+//        FileSystem fileSystem = null;
         boolean result = false;
         try {
-            fileSystem = FileSystem.get(URI.create(hdfsAddress), configuration);
+//            fileSystem = FileSystem.get(URI.create(hdfsAddress), configuration);
             Path oldHadoopFilePath = new Path(oldHadoopFile);
 
             checkFileExists(fileSystem, oldHadoopFilePath);
@@ -316,17 +338,18 @@ public class BaseSaoHDFS extends BaseSAO {
             result = fileSystem.rename(oldHadoopFilePath, newHadoopFilePath);
         } catch (IOException e) {
             throw new SAOException("renameFile 存在出错。 ", e);
-        } finally {
-            try {
-                if (fileSystem != null) {
-                    fileSystem.close();
-                }
-            } catch (IOException e) {
-                throw new SAOException(" renameFile 关闭文件流出错。 ", e);
-            } finally {
-            }
-            return result;
         }
+//        finally {
+//            try {
+//                if (fileSystem != null) {
+//                    fileSystem.close();
+//                }
+//            } catch (IOException e) {
+//                throw new SAOException(" renameFile 关闭文件流出错。 ", e);
+//            } finally {
+//            }
+//        }
+        return result;
     }
 
 
@@ -338,26 +361,26 @@ public class BaseSaoHDFS extends BaseSAO {
      * @return
      */
     public boolean deleteFile(String hadoopPath, boolean recursive) throws SAOException {
-        FileSystem fileSystem = null;
         boolean result = false;
         try {
-            fileSystem = FileSystem.get(URI.create(hdfsAddress), configuration);
+//            fileSystem = FileSystem.get(URI.create(hdfsAddress), configuration);
             Path hadoopPathTmp = new Path(hadoopPath);
             checkFileExists(fileSystem, hadoopPathTmp);
             result = fileSystem.delete(new Path(hadoopPath), recursive);
         } catch (IOException e) {
             throw new SAOException("deleteFile 存在出错。 ", e);
-        } finally {
-            try {
-                if (fileSystem != null) {
-                    fileSystem.close();
-                }
-            } catch (IOException e) {
-                throw new SAOException(" renameFile 关闭文件流出错。 ", e);
-            } finally {
-            }
-            return result;
         }
+//        finally {
+//            try {
+//                if (fileSystem != null) {
+//                    fileSystem.close();
+//                }
+//            } catch (IOException e) {
+//                throw new SAOException(" renameFile 关闭文件流出错。 ", e);
+//            } finally {
+//            }
+//        }
+        return result;
     }
 
     /**
@@ -368,29 +391,19 @@ public class BaseSaoHDFS extends BaseSAO {
      * @throws SAOException
      */
     public void appendFile(byte[] fileBytes, String hadoopPath) throws SAOException {
-        FileSystem fileSystem = null;
+//        FileSystem fileSystem = null;
         FSDataOutputStream fsDataOutputStream = null;
         try {
-            fileSystem = FileSystem.get(URI.create(hdfsAddress), configuration);
+
 
             Path path = new Path(hadoopPath);
             fsDataOutputStream = fileSystem.append(path);
             fsDataOutputStream.write(fileBytes);
-            fsDataOutputStream.close();
+            if (fsDataOutputStream != null) {
+                fsDataOutputStream.close();
+            }
         } catch (IOException e) {
             throw new SAOException("append 到远程文件  " + hadoopPath + " 出错。 ", e);
-        } finally {
-            try {
-                if (fileSystem != null) {
-                    fileSystem.close();
-                }
-                if (fsDataOutputStream != null) {
-                    fsDataOutputStream.close();
-                }
-            } catch (IOException e) {
-                throw new SAOException("append 到远程文件后关闭文件流出错。 ", e);
-            } finally {
-            }
         }
     }
 
@@ -406,25 +419,33 @@ public class BaseSaoHDFS extends BaseSAO {
         // Check file exists
         if (!fileSystem.exists(path)) {
             logger.error("Path '" + path.toString() + "' does not exist.");
-            fileSystem.close();
+//            fileSystem.close();
             throw new FileNotFoundException("Path '" + path.toString() + "' does not exist.");
         }
     }
 
     @Override
     public void destroy() throws Exception {
-
+        try {
+            if (fileSystem != null) {
+                fileSystem.close();
+            }
+        } catch (IOException e) {
+            throw new SAOException(" fileSystem 关闭文件流出错。 ", e);
+        } finally {
+        }
     }
 
     @Override
     public void afterPropertiesSet() throws Exception {
+        Configuration configuration = new Configuration();
         configuration.set("dfs.datanode.use.datanode.hostname", "true");
         configuration.set("dfs.client.use.datanode.hostname", "true");
 
         if (!Validate.isEmpty(this.userName)) {
             System.setProperty("HADOOP_USER_NAME", userName);
         }
-
+        fileSystem = FileSystem.get(URI.create(hdfsAddress), configuration);
     }
 
     public void setHdfsAddress(String hdfsAddress) {

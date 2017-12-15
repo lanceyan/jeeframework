@@ -8,6 +8,7 @@
  */
 package com.jeeframework.util.hadoop.hdfs;
 
+import com.jeeframework.logicframework.integration.sao.SAOException;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.*;
 import org.apache.hadoop.fs.FileSystem;
@@ -31,7 +32,7 @@ public class TestHdfs {
     @Test
     public void testHdfs() throws IOException {
         System.setProperty("HADOOP_USER_NAME", "devadmin");
-//        System.setProperty("HADOOP_ROOT_LOGGER", "DEBUG,console");
+        System.setProperty("HADOOP_ROOT_LOGGER", "DEBUG,console");
 
         Configuration conf = new Configuration();
 //        conf.set("fs.defaultFS", "hdfs://118.190.138.155:9000");
@@ -50,10 +51,11 @@ public class TestHdfs {
         FileInputStream fileInputStream = null;
 
         try {
-            File fff = new File("d:\\logs\\111.txt");
+            File fff = new File("d:\\logs\\11111.txt");
 
             if (!fff.exists()) {
                 System.out.println("no  exist");
+                throw new FileNotFoundException("ffffffffffffffffffff");
             }
 
 //                fileInputStream = new FileInputStream(fff);
@@ -65,10 +67,13 @@ public class TestHdfs {
 //                fsDataOutputStream = fileSystem.create(new Path("/333"));
 //                IOUtils.copyBytes(fileInputStream, fsDataOutputStream, 4096, false);
         } catch (IOException e) {
-            e.printStackTrace();
+//            e.printStackTrace();
+            throw new SAOException(e);
         } finally {
             try {
-                fileSystem.close();
+                if (fileSystem != null) {
+                    fileSystem.close();
+                }
 //                    fileInputStream.close();
 //                    fsDataOutputStream.close();
             } catch (IOException e) {

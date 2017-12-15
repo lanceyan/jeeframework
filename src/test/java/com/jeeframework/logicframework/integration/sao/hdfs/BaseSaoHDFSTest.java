@@ -72,6 +72,7 @@ public class BaseSaoHDFSTest extends AbstractSpringBaseTestNoTransaction {
 
     @Test
     public void deleteFile() throws Exception {
+
         baseSaoHDFS.deleteFile("/5556", true);
     }
 
