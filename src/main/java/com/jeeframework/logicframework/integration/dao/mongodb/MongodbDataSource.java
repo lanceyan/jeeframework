@@ -153,7 +153,7 @@ public class MongodbDataSource implements InitializingBean,DataSource{
 		}
 		
 		MongoOptions options = new MongoOptions();  
-        options.autoConnectRetry = autoConnectRetry;  
+//        options.autoConnectRetry = autoConnectRetry;
         options.connectionsPerHost = connectionsPerHost;  
         options.maxWaitTime = maxWaitTime;  
         options.socketTimeout = socketTimeout;  
@@ -174,11 +174,11 @@ public class MongodbDataSource implements InitializingBean,DataSource{
 				passWord = "";
 			}
 
-			boolean isVerify = db.authenticate(userName, passWord.toCharArray());
+//			boolean isVerify = db.authenticate(userName, passWord.toCharArray());
 
-			if (!isVerify) {
-				throw new RuntimeException("数据库： " + dbName + "  用户名密码输入错误");
-			}
+//			if (!isVerify) {
+//				throw new RuntimeException("数据库： " + dbName + "  用户名密码输入错误");
+//			}
 		}
 	}
 

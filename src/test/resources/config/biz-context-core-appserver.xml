@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+           http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+           http://www.springframework.org/schema/aop
+           http://www.springframework.org/schema/aop/spring-aop-3.0.xsd
+           http://www.springframework.org/schema/tx
+           http://www.springframework.org/schema/tx/spring-tx-3.0.xsd
+           http://www.springframework.org/schema/context
+           http://www.springframework.org/schema/context/spring-context-3.0.xsd">
+
+    <description>定义业务层和集成层对象，包括Action、Service、BO、DAO、SAO、JNDI资源</description>
+
+
+    <context:component-scan
+            base-package="com.jeeframework.logicframework.integration.dao.redis"/>
+    <!--===================================================================== -->
+    <!-- 配置外部变量文件 -->
+    <!--===================================================================== -->
+    <!--<bean id="propertyConfigurer" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">-->
+    <!--</bean>-->
+    <bean id="configProperties" class="org.springframework.beans.factory.config.PropertiesFactoryBean">
+        <property name="locations">
+            <description>可以引用CLASSPATH中template-local.properties中定义的变量</description>
+            <list>
+                <value>classpath:template-${conf.env}.properties</value>
+            </list>
+        </property>
+    </bean>
+    <bean id="propertyConfigurer" class="org.springframework.beans.factory.config.PreferencesPlaceholderConfigurer">
+        <property name="properties" ref="configProperties"/>
+    </bean>
+
+    <bean id="redisClient" class="com.jeeframework.logicframework.integration.dao.redis.BaseDaoRedis">
+        <property name="redisUrls" value="${redis.urls}"/>
+        <!--<property name="poolType" value="hash"/>-->
+        <property name="auth" value="${redis.password}"/>
+        <property name="namespace"  value="${redis.namespace}" />
+
+    </bean>
+
+    <bean id="baseSaoHDFS" class="com.jeeframework.logicframework.integration.sao.hdfs.BaseSaoHDFS">
+        <property name="hdfsAddress" value="${hadoop.hdfsAddress}"/>
+        <property name="userName"  value="${hadoop.username}" />
+    </bean>
+
+</beans>

@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?><!--Converted at: Fri Feb 20 23:34:39 CST 2015-->
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="bossBossUserMapper">
+    <!-- TODO: 在这里定义各种sql语句，用法请参考iBATIS文档 -->
+    <select id="getBossUserByUid" parameterType="java.lang.Long" resultType="com.tests.integration.bo.BossUser">
+            SELECT uid,username,nickname,description,passwd,avatar,type,email,createtime,lastmodifytime  FROM boss_user
+            where uid =   #{value}
+            limit 1
+    </select>
+    <select id="getBossUsers" parameterType="com.tests.web.filter.GetBossUsersFilter"
+            resultType="com.tests.integration.bo.BossUser">
+        SELECT uid,username,nickname,description,passwd,avatar,type,email,createtime,lastmodifytime FROM boss_user
+        limit #{startRow}
+        <if test="pageSize!= null  ">,#{pageSize}</if>
+    </select>
+
+    <select id="getBossUserByPasswd" parameterType="com.tests.integration.bo.BossUser"
+            resultType="com.tests.integration.bo.BossUser">
+            SELECT uid,username,nickname,description,passwd,avatar,type,email,createtime,lastmodifytime FROM boss_user WHERE  username =   #{userName}  and  passwd= password(#{passwd})     limit 1
+    </select>
+
+    <insert id="addBossUser" parameterType="com.tests.integration.bo.BossUser" useGeneratedKeys="true"
+            keyProperty="uid">
+            INSERT INTO boss_user (username,nickname,description,passwd,avatar,type,email,createtime,lastmodifytime)
+            VALUES (#{userName}, #{nickName}, #{description},password(#{passwd}),  #{avatar}, #{type},  #{email}, now(), now())
+    </insert>
+
+    <update id="updateBossUser" parameterType="com.tests.web.filter.UpdateBossUserFilter">
+        UPDATE boss_user set lastmodifytime=now()
+        <if test="newPassword != null and newPassword != ''">
+            ,passwd= password(#{newPassword})
+        </if>
+        <if test="nickName != null and nickName != ''">
+            ,nickname= #{nickName}
+        </if>
+        <if test="description != null and description != ''">
+            ,description= #{description}
+        </if>
+        <if test="avatar != null and avatar != ''">
+            ,avatar= #{avatar}
+        </if>
+        <if test="type != null ">
+            ,type= #{type}
+        </if>
+        <if test="email != null and email != ''">
+            ,email= #{email}
+        </if>
+        WHERE uid= #{uid}
+    </update>
+
+    <delete id="deleteBossUser" parameterType="java.lang.Long">
+            delete  from  boss_user   WHERE uid= #{value}
+    </delete>
+
+</mapper>

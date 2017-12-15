@@ -46,7 +46,7 @@ public abstract class AbstractMinaBaseTest extends AbstractTransactionalJUnit4Sp
     }
 
     public static void setTestEnv() {
-        JeeFrameWorkServer.initEnvVariables();
+        JeeFrameWorkServer.initWebEnvVariables();
     }
 
     @Before

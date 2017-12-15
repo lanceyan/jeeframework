@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?><!--Converted at: Fri Feb 20 23:34:39 CST 2015-->
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="userMapper">
+    <!-- TODO: 在这里定义各种sql语句，用法请参考iBATIS文档 -->
+
+    <select id="getUsers" parameterType="com.tests.web.filter.GetUsersFilter" resultType="com.tests.integration.bo.User">
+        SELECT uid,mobile,sex,city,province,country,nickname,description,passwd,avatar,birthday,token,createtime,lastmodifytime FROM user
+        <where>
+            <if test="greatCreateTime != null  ">
+                createtime >=   #{greatCreateTime}
+            </if>
+            <if test="lessCreateTime != null  ">
+                <![CDATA[
+                  and createtime <   #{lessCreateTime}
+                ]]>
+            </if>
+            <if test="nickName != null  ">
+                and nickname like   CONCAT(#{nickName},'%')
+            </if>
+            <if test="source != null  ">
+                and source =   #{source}
+            </if>
+        </where>
+        <if test="orderBy != null  ">
+          order by ${orderBy}  <if test="orderDirect!= null  ">${orderDirect}</if>
+        </if>
+        limit #{startRow}
+            <if test="pageSize!= null  ">,#{pageSize}</if>
+    </select>
+
+    <select id="getUsersCount" parameterType="com.tests.web.filter.GetUsersFilter" resultType="java.lang.Long">
+        SELECT count(uid) FROM user
+        <where>
+            <if test="greatCreateTime != null  ">
+                createtime >=   #{greatCreateTime}
+            </if>
+            <if test="lessCreateTime != null  ">
+                <![CDATA[
+                  and createtime <   #{lessCreateTime}
+                ]]>
+            </if>
+            <if test="nickName != null  ">
+                and nickname like   CONCAT(#{nickName},'%')
+            </if>
+            <if test="source != null  ">
+                and source =   #{source}
+            </if>
+        </where>
+    </select>
+
+</mapper>

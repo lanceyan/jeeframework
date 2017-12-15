@@ -131,7 +131,8 @@ public class HttpClientHelper {
 
         //设置重试3次
         httpClient = HttpClients.custom()
-                .setConnectionManager(connManager).setRetryHandler(new DefaultHttpRequestRetryHandler(3, false)).setRedirectStrategy(new LaxRedirectStrategy())
+                .setConnectionManager(connManager).setRetryHandler(new DefaultHttpRequestRetryHandler(3, false))
+                .setRedirectStrategy(new LaxRedirectStrategy())
                 .build();
 
         CookieStore cookieStore = new BasicCookieStore();
@@ -180,7 +181,8 @@ public class HttpClientHelper {
         }
     }
 
-    private HttpResponse doGetWrapper(String url, String requestEncoding, String responseEncoding, Map<String, String> headerMap, SiteProxyIp proxyIp, int responseType) throws HttpException, IOException {
+    private HttpResponse doGetWrapper(String url, String requestEncoding, String responseEncoding, Map<String,
+            String> headerMap, SiteProxyIp proxyIp, int responseType) throws HttpException, IOException {
 
         HttpResponse httpResponse = new HttpResponse();
         httpResponse.setRequestEncode(requestEncoding);
@@ -259,7 +261,8 @@ public class HttpClientHelper {
 
                 HttpHost currentHost = (HttpHost) context.getAttribute(
                         HttpCoreContext.HTTP_TARGET_HOST);
-//                String currentUrl = (currentReq.getURI().isAbsolute()) ? currentReq.getURI().toString() : (currentHost.toURI() + currentReq.getURI());
+//                String currentUrl = (currentReq.getURI().isAbsolute()) ? currentReq.getURI().toString() :
+// (currentHost.toURI() + currentReq.getURI());
 
                 String currentUrl = currentHost.toURI() + currentReq.getRequestLine().getUri();
 
@@ -294,7 +297,7 @@ public class HttpClientHelper {
                             if (acceptEncoding != null && acceptEncoding.toLowerCase().indexOf("gzip") > -1) {
                                 GZIPInputStream gzin = new GZIPInputStream(inStream);
                                 try {
-                                    responseBytes = readStreamToBytes(charset, gzin);
+                                    responseBytes = readStreamToBytes(gzin);
                                 } finally {
                                     if (gzin != null) {
                                         gzin.close();
@@ -302,7 +305,7 @@ public class HttpClientHelper {
                                 }
 
                             } else {
-                                responseBytes = readStreamToBytes(charset, inStream);
+                                responseBytes = readStreamToBytes(inStream);
                             }
                             httpResponse.setContentBytes(responseBytes);
                             httpResponse.setContentType(HttpResponse.CONTENT_TYPE_BYTE);
@@ -311,7 +314,7 @@ public class HttpClientHelper {
                             if (acceptEncoding != null && acceptEncoding.toLowerCase().indexOf("gzip") > -1) {
                                 GZIPInputStream gzin = new GZIPInputStream(inStream);
                                 try {
-                                    responseStr = readStreamToString(charset, gzin);
+                                    responseStr = readStreamToString(charset, gzin, responseEncoding);
                                 } finally {
                                     if (gzin != null) {
                                         gzin.close();
@@ -319,7 +322,7 @@ public class HttpClientHelper {
                                 }
 
                             } else {
-                                responseStr = readStreamToString(charset, inStream);
+                                responseStr = readStreamToString(charset, inStream, responseEncoding);
                             }
                             httpResponse.setContent(responseStr);
                         }
@@ -370,7 +373,8 @@ public class HttpClientHelper {
         while (true) {
             try {
                 //返回类型为1 ，即返回string
-                return doPostWrapper(url, postData, requestEncoding, responseEncoding, headerMap, proxyIp, RESPONSE_RET_STRING);
+                return doPostWrapper(url, postData, requestEncoding, responseEncoding, headerMap, proxyIp,
+                        RESPONSE_RET_STRING);
             } catch (IOException e) {
                 retryTimes++;
                 if (retryTimes == retry_times) {
@@ -387,7 +391,8 @@ public class HttpClientHelper {
         while (true) {
             try {
                 //返回类型为2 ，即返回bytes
-                return doPostWrapper(url, postData, requestEncoding, responseEncoding, headerMap, proxyIp, RESPONSE_RET_BYTES);
+                return doPostWrapper(url, postData, requestEncoding, responseEncoding, headerMap, proxyIp,
+                        RESPONSE_RET_BYTES);
             } catch (IOException e) {
                 retryTimes++;
                 if (retryTimes == retry_times) {
@@ -397,7 +402,9 @@ public class HttpClientHelper {
         }
     }
 
-    private HttpResponse doPostWrapper(String url, Map<String, String> postData, String requestEncoding, String responseEncoding, Map<String, String> headerMap, SiteProxyIp proxyIp, int responseType) throws HttpException, IOException {
+    private HttpResponse doPostWrapper(String url, Map<String, String> postData, String requestEncoding, String
+            responseEncoding, Map<String, String> headerMap, SiteProxyIp proxyIp, int responseType) throws
+            HttpException, IOException {
 
         HttpResponse httpResponse = new HttpResponse();
         httpResponse.setRequestEncode(requestEncoding);
@@ -477,7 +484,8 @@ public class HttpClientHelper {
 
                 HttpHost currentHost = (HttpHost) context.getAttribute(
                         HttpCoreContext.HTTP_TARGET_HOST);
-//                String currentUrl = (currentReq.getURI().isAbsolute()) ? currentReq.getURI().toString() : (currentHost.toURI() + currentReq.getURI());
+//                String currentUrl = (currentReq.getURI().isAbsolute()) ? currentReq.getURI().toString() :
+// (currentHost.toURI() + currentReq.getURI());
 
                 String currentUrl = currentHost.toURI() + currentReq.getRequestLine().getUri();
                 httpResponse.setTargetUrl(currentUrl);
@@ -512,7 +520,7 @@ public class HttpClientHelper {
                             if (acceptEncoding != null && acceptEncoding.toLowerCase().indexOf("gzip") > -1) {
                                 GZIPInputStream gzin = new GZIPInputStream(inStream);
                                 try {
-                                    responseBytes = readStreamToBytes(charset, gzin);
+                                    responseBytes = readStreamToBytes(gzin);
                                 } finally {
                                     if (gzin != null) {
                                         gzin.close();
@@ -520,7 +528,7 @@ public class HttpClientHelper {
                                 }
 
                             } else {
-                                responseBytes = readStreamToBytes(charset, inStream);
+                                responseBytes = readStreamToBytes(inStream);
                             }
                             httpResponse.setContentBytes(responseBytes);
                             httpResponse.setContentType(HttpResponse.CONTENT_TYPE_BYTE);
@@ -529,7 +537,7 @@ public class HttpClientHelper {
                             if (acceptEncoding != null && acceptEncoding.toLowerCase().indexOf("gzip") > -1) {
                                 GZIPInputStream gzin = new GZIPInputStream(inStream);
                                 try {
-                                    responseStr = readStreamToString(charset, gzin);
+                                    responseStr = readStreamToString(charset, gzin, responseEncoding);
                                 } finally {
                                     if (gzin != null) {
                                         gzin.close();
@@ -537,7 +545,7 @@ public class HttpClientHelper {
                                 }
 
                             } else {
-                                responseStr = readStreamToString(charset, inStream);
+                                responseStr = readStreamToString(charset, inStream, responseEncoding);
                             }
                             httpResponse.setContent(responseStr);
                         }
@@ -595,7 +603,9 @@ public class HttpClientHelper {
         }
     }
 
-    private HttpResponse doPostMultiPartWrapper(String url, Map<String, ContentBody> postData, String requestEncoding, String responseEncoding, Map<String, String> headerMap, SiteProxyIp proxyIp) throws HttpException, IOException {
+    private HttpResponse doPostMultiPartWrapper(String url, Map<String, ContentBody> postData, String
+            requestEncoding, String responseEncoding, Map<String, String> headerMap, SiteProxyIp proxyIp) throws
+            HttpException, IOException {
 
         HttpResponse httpResponse = new HttpResponse();
         httpResponse.setRequestEncode(requestEncoding);
@@ -654,7 +664,8 @@ public class HttpClientHelper {
             httpPost.setHeaders(headersArray);
 
             // 以浏览器兼容模式运行，防止文件名乱码。
-            MultipartEntityBuilder multipartEntityBuilder = MultipartEntityBuilder.create().setMode(HttpMultipartMode.BROWSER_COMPATIBLE);
+            MultipartEntityBuilder multipartEntityBuilder = MultipartEntityBuilder.create().setMode(HttpMultipartMode
+                    .BROWSER_COMPATIBLE);
 
 
             Set<Map.Entry<String, ContentBody>> entrySet = postData.entrySet();
@@ -684,7 +695,8 @@ public class HttpClientHelper {
 
                 HttpHost currentHost = (HttpHost) context.getAttribute(
                         HttpCoreContext.HTTP_TARGET_HOST);
-//                String currentUrl = (currentReq.getURI().isAbsolute()) ? currentReq.getURI().toString() : (currentHost.toURI() + currentReq.getURI());
+//                String currentUrl = (currentReq.getURI().isAbsolute()) ? currentReq.getURI().toString() :
+// (currentHost.toURI() + currentReq.getURI());
 
                 String currentUrl = currentHost.toURI() + currentReq.getRequestLine().getUri();
                 httpResponse.setTargetUrl(currentUrl);
@@ -716,7 +728,7 @@ public class HttpClientHelper {
                         if (acceptEncoding != null && acceptEncoding.toLowerCase().indexOf("gzip") > -1) {
                             GZIPInputStream gzin = new GZIPInputStream(inStream);
                             try {
-                                responseStr = readStreamToString(charset, gzin);
+                                responseStr = readStreamToString(charset, gzin, responseEncoding);
                             } finally {
                                 if (gzin != null) {
                                     gzin.close();
@@ -724,7 +736,7 @@ public class HttpClientHelper {
                             }
 
                         } else {
-                            responseStr = readStreamToString(charset, inStream);
+                            responseStr = readStreamToString(charset, inStream, responseEncoding);
                         }
                         // do something useful with the response
                     } catch (IOException ex) {
@@ -770,7 +782,8 @@ public class HttpClientHelper {
         int retryTimes = 0;
         while (true) {
             try {
-                return doPostStringWrapper(url, stringEntity, requestEncoding, responseEncoding, headerMap, proxyIp, RESPONSE_RET_STRING);
+                return doPostStringWrapper(url, stringEntity, requestEncoding, responseEncoding, headerMap, proxyIp,
+                        RESPONSE_RET_STRING);
             } catch (IOException e) {
                 retryTimes++;
                 if (retryTimes == retry_times) {
@@ -782,12 +795,14 @@ public class HttpClientHelper {
 
 
     public HttpResponse doPostStringAndRetBytes(String url, String stringEntity, String requestEncoding,
-                                                String responseEncoding, Map<String, String> headerMap, SiteProxyIp proxyIp)
+                                                String responseEncoding, Map<String, String> headerMap, SiteProxyIp
+                                                        proxyIp)
             throws HttpException, IOException {
         int retryTimes = 0;
         while (true) {
             try {
-                return doPostStringWrapper(url, stringEntity, requestEncoding, responseEncoding, headerMap, proxyIp, RESPONSE_RET_BYTES);
+                return doPostStringWrapper(url, stringEntity, requestEncoding, responseEncoding, headerMap, proxyIp,
+                        RESPONSE_RET_BYTES);
             } catch (IOException e) {
                 retryTimes++;
                 if (retryTimes == retry_times) {
@@ -797,7 +812,9 @@ public class HttpClientHelper {
         }
     }
 
-    private HttpResponse doPostStringWrapper(String url, String stringEntity, String requestEncoding, String responseEncoding, Map<String, String> headerMap, SiteProxyIp proxyIp, int responseType) throws HttpException, IOException {
+    private HttpResponse doPostStringWrapper(String url, String stringEntity, String requestEncoding, String
+            responseEncoding, Map<String, String> headerMap, SiteProxyIp proxyIp, int responseType) throws
+            HttpException, IOException {
 
         HttpResponse httpResponse = new HttpResponse();
         httpResponse.setRequestEncode(requestEncoding);
@@ -870,7 +887,8 @@ public class HttpClientHelper {
 
                 HttpHost currentHost = (HttpHost) context.getAttribute(
                         HttpCoreContext.HTTP_TARGET_HOST);
-//                String currentUrl = (currentReq.getURI().isAbsolute()) ? currentReq.getURI().toString() : (currentHost.toURI() + currentReq.getURI());
+//                String currentUrl = (currentReq.getURI().isAbsolute()) ? currentReq.getURI().toString() :
+// (currentHost.toURI() + currentReq.getURI());
 
                 String currentUrl = currentHost.toURI() + currentReq.getRequestLine().getUri();
                 httpResponse.setTargetUrl(currentUrl);
@@ -903,7 +921,7 @@ public class HttpClientHelper {
                             if (acceptEncoding != null && acceptEncoding.toLowerCase().indexOf("gzip") > -1) {
                                 GZIPInputStream gzin = new GZIPInputStream(inStream);
                                 try {
-                                    responseBytes = readStreamToBytes(charset, gzin);
+                                    responseBytes = readStreamToBytes(gzin);
                                 } finally {
                                     if (gzin != null) {
                                         gzin.close();
@@ -911,7 +929,7 @@ public class HttpClientHelper {
                                 }
 
                             } else {
-                                responseBytes = readStreamToBytes(charset, inStream);
+                                responseBytes = readStreamToBytes(inStream);
                             }
                             httpResponse.setContentBytes(responseBytes);
                             httpResponse.setContentType(HttpResponse.CONTENT_TYPE_BYTE);
@@ -920,7 +938,7 @@ public class HttpClientHelper {
                             if (acceptEncoding != null && acceptEncoding.toLowerCase().indexOf("gzip") > -1) {
                                 GZIPInputStream gzin = new GZIPInputStream(inStream);
                                 try {
-                                    responseStr = readStreamToString(charset, gzin);
+                                    responseStr = readStreamToString(charset, gzin, responseEncoding);
                                 } finally {
                                     if (gzin != null) {
                                         gzin.close();
@@ -928,7 +946,7 @@ public class HttpClientHelper {
                                 }
 
                             } else {
-                                responseStr = readStreamToString(charset, inStream);
+                                responseStr = readStreamToString(charset, inStream, responseEncoding);
                             }
                             httpResponse.setContent(responseStr);
                         }
@@ -977,7 +995,8 @@ public class HttpClientHelper {
         int retryTimes = 0;
         while (true) {
             try {
-                return doPostBytesWrapper(url, bytesEntity, requestEncoding, responseEncoding, headerMap, proxyIp, RESPONSE_RET_STRING);
+                return doPostBytesWrapper(url, bytesEntity, requestEncoding, responseEncoding, headerMap, proxyIp,
+                        RESPONSE_RET_STRING);
             } catch (IOException e) {
                 retryTimes++;
                 if (retryTimes == retry_times) {
@@ -988,12 +1007,14 @@ public class HttpClientHelper {
     }
 
     public HttpResponse doPostBytesAndRetBytes(String url, byte[] bytesEntity, String requestEncoding,
-                                               String responseEncoding, Map<String, String> headerMap, SiteProxyIp proxyIp)
+                                               String responseEncoding, Map<String, String> headerMap, SiteProxyIp
+                                                       proxyIp)
             throws HttpException, IOException {
         int retryTimes = 0;
         while (true) {
             try {
-                return doPostBytesWrapper(url, bytesEntity, requestEncoding, responseEncoding, headerMap, proxyIp, RESPONSE_RET_BYTES);
+                return doPostBytesWrapper(url, bytesEntity, requestEncoding, responseEncoding, headerMap, proxyIp,
+                        RESPONSE_RET_BYTES);
             } catch (IOException e) {
                 retryTimes++;
                 if (retryTimes == retry_times) {
@@ -1004,7 +1025,9 @@ public class HttpClientHelper {
     }
 
 
-    private HttpResponse doPostBytesWrapper(String url, byte[] bytesEntity, String requestEncoding, String responseEncoding, Map<String, String> headerMap, SiteProxyIp proxyIp, int responseType) throws HttpException, IOException {
+    private HttpResponse doPostBytesWrapper(String url, byte[] bytesEntity, String requestEncoding, String
+            responseEncoding, Map<String, String> headerMap, SiteProxyIp proxyIp, int responseType) throws
+            HttpException, IOException {
 
         HttpResponse httpResponse = new HttpResponse();
         httpResponse.setRequestEncode(requestEncoding);
@@ -1077,7 +1100,8 @@ public class HttpClientHelper {
 
                 HttpHost currentHost = (HttpHost) context.getAttribute(
                         HttpCoreContext.HTTP_TARGET_HOST);
-//                String currentUrl = (currentReq.getURI().isAbsolute()) ? currentReq.getURI().toString() : (currentHost.toURI() + currentReq.getURI());
+//                String currentUrl = (currentReq.getURI().isAbsolute()) ? currentReq.getURI().toString() :
+// (currentHost.toURI() + currentReq.getURI());
 
                 String currentUrl = currentHost.toURI() + currentReq.getRequestLine().getUri();
                 httpResponse.setTargetUrl(currentUrl);
@@ -1108,7 +1132,7 @@ public class HttpClientHelper {
                             if (acceptEncoding != null && acceptEncoding.toLowerCase().indexOf("gzip") > -1) {
                                 GZIPInputStream gzin = new GZIPInputStream(inStream);
                                 try {
-                                    responseBytes = readStreamToBytes(charset, gzin);
+                                    responseBytes = readStreamToBytes(gzin);
                                 } finally {
                                     if (gzin != null) {
                                         gzin.close();
@@ -1116,7 +1140,7 @@ public class HttpClientHelper {
                                 }
 
                             } else {
-                                responseBytes = readStreamToBytes(charset, inStream);
+                                responseBytes = readStreamToBytes(inStream);
                             }
                             httpResponse.setContentBytes(responseBytes);
                             httpResponse.setContentType(HttpResponse.CONTENT_TYPE_BYTE);
@@ -1125,7 +1149,7 @@ public class HttpClientHelper {
                             if (acceptEncoding != null && acceptEncoding.toLowerCase().indexOf("gzip") > -1) {
                                 GZIPInputStream gzin = new GZIPInputStream(inStream);
                                 try {
-                                    responseStr = readStreamToString(charset, gzin);
+                                    responseStr = readStreamToString(charset, gzin, responseEncoding);
                                 } finally {
                                     if (gzin != null) {
                                         gzin.close();
@@ -1133,7 +1157,7 @@ public class HttpClientHelper {
                                 }
 
                             } else {
-                                responseStr = readStreamToString(charset, inStream);
+                                responseStr = readStreamToString(charset, inStream, responseEncoding);
                             }
                             httpResponse.setContent(responseStr);
                         }
@@ -1179,10 +1203,12 @@ public class HttpClientHelper {
         List<Header> headers = new ArrayList<Header>();
 
         Map<String, String> headersMapTmp = new HashMap<String, String>();
-        headersMapTmp.put("Accept", "text/html,application/xhtml+xml,application/xml,application/json,text/javascript,*/*;");
+        headersMapTmp.put("Accept", "text/html,application/xhtml+xml,application/xml,application/json," +
+                "text/javascript,*/*;");
         headersMapTmp.put("Accept-Language", "zh-cn");
 
-        headersMapTmp.put("User-Agent", "Mozilla/5.0 (Windows NT 5.1) AppleWebKit/537.11 (KHTML, like Gecko) Chrome/23.0.1271.97 Safari/537.11");
+        headersMapTmp.put("User-Agent", "Mozilla/5.0 (Windows NT 5.1) AppleWebKit/537.11 (KHTML, like Gecko) " +
+                "Chrome/23.0.1271.97 Safari/537.11");
 
 //        headersMapTmp.put("Cache-Control", "no-cache");
 //        headers.add(new BasicHeader("Referer", refer));
@@ -1219,7 +1245,7 @@ public class HttpClientHelper {
         return pairs;
     }
 
-    public static byte[] readStreamToBytes(Charset charsetObj, InputStream inputStream) throws IOException {
+    public static byte[] readStreamToBytes(InputStream inputStream) throws IOException {
 
         byte[] htmlBytes = null;
         ByteArrayOutputStream swapStream = new ByteArrayOutputStream();
@@ -1245,9 +1271,16 @@ public class HttpClientHelper {
         }
     }
 
-    public static String readStreamToString(Charset charsetObj, InputStream inputStream) throws IOException {
-        byte[] htmlBytes = readStreamToBytes(charsetObj, inputStream);
-        String charSet = getHtmlCharset(htmlBytes, charsetObj);
+    public static String readStreamToString(Charset charsetObj, InputStream inputStream, String responseEncoding)
+            throws IOException {
+        byte[] htmlBytes = readStreamToBytes(inputStream);
+
+        String charSet = responseEncoding;
+
+        if (Validate.isEmpty(charSet)) {
+            charSet = getHtmlCharset(htmlBytes, charsetObj);
+        }
+
         String responseStr = new String(htmlBytes, charSet);
         return responseStr;
     }
@@ -1287,13 +1320,15 @@ public class HttpClientHelper {
      * @param httpMethod Http Method
      */
 //    public void setHeaders(HttpRequestBase httpMethod, String refer, String requestEncoding) {
-//        headers.add(new BasicHeader("Accept", "text/html,application/xhtml+xml,application/xml,application/json,text/javascript,*/*;");
+//        headers.add(new BasicHeader("Accept", "text/html,application/xhtml+xml,application/xml,application/json,
+// text/javascript,*/*;");
 //        headers.add(new BasicHeader("Accept-Language", "zh-cn");
 //
 //        if (!Validate.isEmpty(refer)) {
 //            headers.add(new BasicHeader("User-Agent", refer);
 //        } else {
-//            headers.add(new BasicHeader("User-Agent", "Mozilla/5.0 (Windows NT 5.1) AppleWebKit/537.11 (KHTML, like Gecko) Chrome/23.0.1271.97 Safari/537.11");
+//            headers.add(new BasicHeader("User-Agent", "Mozilla/5.0 (Windows NT 5.1) AppleWebKit/537.11 (KHTML, like
+// Gecko) Chrome/23.0.1271.97 Safari/537.11");
 //        }
 //
 //        headers.add(new BasicHeader("Cache-Control", "no-cache");
@@ -1393,8 +1428,12 @@ public class HttpClientHelper {
         HttpClientHelper httpClientHelper = new HttpClientHelper();
         Map<String, String> headerMap = new HashMap<String, String>();
         headerMap.put("X-Requested-With", "com.JEEFRAMEWORK.mm");
-        headerMap.put("User-Agent", "Mozilla/5.0 (Linux; U; Android 4.3; zh-cn; Galaxy Nexus Build /JWR66Y) AppleWebKit/534.30 (KHTML, like Gecko) Version/4.0 Mobile Safari/534.30 MicroMessenger/5.3.1.51_r733746.462 NetType/WIFI");
-        HttpResponse htmlContent = httpClientHelper.doGet("http://mp.weixin.qq.com/s?__biz=MzA3ODQ1NjYyOQ==&mid=201970220&idx=1&sn=8301e46b6a2684ecf46a32c2cb310463&3rd=MzA3MDU4NTYzMw==&scene=6#rd", "utf-8", "utf-8", headerMap, null);
+        headerMap.put("User-Agent", "Mozilla/5.0 (Linux; U; Android 4.3; zh-cn; Galaxy Nexus Build /JWR66Y) " +
+                "AppleWebKit/534.30 (KHTML, like Gecko) Version/4.0 Mobile Safari/534.30 " +
+                "MicroMessenger/5.3.1.51_r733746.462 NetType/WIFI");
+        HttpResponse htmlContent = httpClientHelper.doGet("http://mp.weixin.qq" +
+                ".com/s?__biz=MzA3ODQ1NjYyOQ==&mid=201970220&idx=1&sn=8301e46b6a2684ecf46a32c2cb310463&3rd" +
+                "=MzA3MDU4NTYzMw==&scene=6#rd", "utf-8", "utf-8", headerMap, null);
 
         System.out.println(htmlContent.getContent());
     }
@@ -1409,7 +1448,8 @@ public class HttpClientHelper {
 
         postDatarMap.put("srchtxt", "a");
         postDatarMap.put("searchsubmit", "yes");
-        HttpResponse htmlContent = httpClientHelper.doPost("http://www.discuz.net/search.php?mod=portal", postDatarMap, "utf-8", "utf-8", headerMap, null);
+        HttpResponse htmlContent = httpClientHelper.doPost("http://www.discuz.net/search.php?mod=portal",
+                postDatarMap, "utf-8", "utf-8", headerMap, null);
 
     }
 }

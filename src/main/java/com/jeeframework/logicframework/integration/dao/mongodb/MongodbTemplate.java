@@ -10,40 +10,22 @@
 
 package com.jeeframework.logicframework.integration.dao.mongodb;
 
+import com.jeeframework.util.validate.Validate;
+import com.mongodb.*;
+import net.sf.json.JSONArray;
+import net.sf.json.JSONException;
+import net.sf.json.processors.PropertyNameProcessor;
+import org.apache.commons.beanutils.PropertyUtils;
+import org.bson.types.ObjectId;
+import org.springframework.dao.DataAccessException;
+
 import java.beans.PropertyDescriptor;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.math.BigDecimal;
 import java.math.BigInteger;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
-import net.sf.json.JSONArray;
-import net.sf.json.JSONException;
-import net.sf.json.processors.PropertyNameProcessor;
-
-import org.apache.commons.beanutils.PropertyUtils;
-import org.bson.types.ObjectId;
-import org.springframework.dao.DataAccessException;
-
-import com.jeeframework.util.validate.Validate;
-import com.mongodb.BasicDBList;
-import com.mongodb.BasicDBObject;
-import com.mongodb.CommandResult;
-import com.mongodb.DB;
-import com.mongodb.DBCollection;
-import com.mongodb.DBCursor;
-import com.mongodb.DBObject;
-import com.mongodb.Mongo;
-import com.mongodb.MongoException;
-import com.mongodb.WriteConcern;
-import com.mongodb.WriteResult;
+import java.util.*;
 
 /**
  * 
@@ -87,12 +69,12 @@ public class MongodbTemplate extends MongodbAccessor implements MongodbOperation
             }
 
             WriteResult ret = dbCol.save(entityDbObj, WriteConcern.SAFE);
-            CommandResult err = ret.getLastError();
-            if (null != err && null != err.get("err")) {
-                throw err.getException();
-            } else {
+//            CommandResult err = ret.getLastError();
+//            if (null != err && null != err.get("err")) {
+//                throw err.getException();
+//            } else {
                 result = ret.getN();
-            }
+//            }
         } catch (MongoException e) {
             throw new MongodbQueryExcepton(e.getMessage(), e);
         }
@@ -166,17 +148,17 @@ public class MongodbTemplate extends MongodbAccessor implements MongodbOperation
                 }
                 WriteResult ret = dbCol.insert(entityDbObj, WriteConcern.SAFE);
                 //				WriteResult ret = dbCol.insert(entityDbObj);
-                CommandResult err = ret.getLastError();
-                if (null != err && null != err.get("err")) {
-                    throw err.getException();
-                } else {
+//                CommandResult err = ret.getLastError();
+//                if (null != err && null != err.get("err")) {
+//                    throw err.getException();
+//                } else {
                     //					result = ret.getN();
                     result = id;
-                }
+//                }
             } catch (MongoException me) {
-                if (me instanceof MongoException.DuplicateKey) {
-                    throw new MongodbQueryExcepton("DuplicateKey", me);
-                }
+//                if (me instanceof MongoException.DuplicateKey) {
+//                    throw new MongodbQueryExcepton("DuplicateKey", me);
+//                }
                 throw new MongodbQueryExcepton(me.getMessage(), me);
             } catch (Exception e) {
                 throw new MongodbQueryExcepton(e.getMessage(), e);
@@ -236,12 +218,12 @@ public class MongodbTemplate extends MongodbAccessor implements MongodbOperation
             }
 
             WriteResult ret = dbCol.update(queryObj, entityDbObj, upsert, multi, WriteConcern.SAFE);
-            CommandResult err = ret.getLastError();
-            if (null != err && null != err.get("err")) {
-                throw err.getException();
-            } else {
+//            CommandResult err = ret.getLastError();
+//            if (null != err && null != err.get("err")) {
+//                throw err.getException();
+//            } else {
                 result = ret.getN();
-            }
+//            }
         } catch (MongoException e) {
             throw new MongodbQueryExcepton(e.getMessage(), e);
         }
@@ -780,16 +762,16 @@ public class MongodbTemplate extends MongodbAccessor implements MongodbOperation
 
             WriteResult ret = dbCol.remove(query, WriteConcern.SAFE);
             // WriteResult ret = dbCol.insert(entityDbObj);
-            CommandResult err = ret.getLastError();
-            if (null != err && null != err.get("err")) {
-                throw err.getException();
-            } else {
+//            CommandResult err = ret.getLastError();
+//            if (null != err && null != err.get("err")) {
+//                throw err.getException();
+//            } else {
                 result = ret.getN();
-            }
+//            }
         } catch (MongoException me) {
-            if (me instanceof MongoException.DuplicateKey) {
-                throw new MongodbQueryExcepton("DuplicateKey", me);
-            }
+//            if (me instanceof MongoException.DuplicateKey) {
+//                throw new MongodbQueryExcepton("DuplicateKey", me);
+//            }
             throw new MongodbQueryExcepton(me.getMessage(), me);
         } catch (Exception e) {
             throw new MongodbQueryExcepton(e.getMessage(), e);

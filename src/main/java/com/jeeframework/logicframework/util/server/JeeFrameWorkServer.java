@@ -62,7 +62,7 @@ public class JeeFrameWorkServer {
     }
 
     public void start() {
-        initEnvVariables();
+        initWebEnvVariables();
 
 
         serverProperties = new JeeProperties(SERVER_CONFIG_FILE, false);
@@ -79,6 +79,49 @@ public class JeeFrameWorkServer {
         minaTcpServer.start();
 
 
+    }
+
+    public static void initWebEnvVariables() {
+        initEnvVariables();
+
+
+        //配置api文档的是否开启
+        String confApiDoc = null;
+        try {
+            confApiDoc = System.getProperty("conf.apidoc");
+        } catch (Exception e) {
+        }
+        if (Validate.isEmpty(confApiDoc)) {
+            confApiDoc = "close";
+            System.setProperty("conf.apidoc", confApiDoc);
+            System.out.println("===============没有配置  -Dconf.apidoc   环境变量，使用默认配置  " + confApiDoc + "  " +
+                    "==================");
+        } else {
+            System.out.println("===============找到 -Dconf.apidoc    系统环境变量，值为：  " + confApiDoc + "  ==================");
+        }
+
+
+        //配置webview的模板路径
+        String confTemplPath = null;
+        try {
+            confTemplPath = System.getProperty("conf.templ.path");
+        } catch (Exception e) {
+        }
+        if (Validate.isEmpty(confTemplPath)) {
+            String path = WebServerUtil.findWebDescriptor();
+            if (Validate.isEmpty(path)) {
+                throw new BaseException("没有找到web.xml");
+            }
+            String jspDir = StringUtils.substringBefore(path, "web.xml") + "jsp";
+
+            confTemplPath = jspDir;
+            System.setProperty("conf.templ.path", confTemplPath);
+            System.out.println("===============没有配置  -Dconf.templ.path  环境变量，使用默认配置  " + confTemplPath + "  " +
+                    "==================");
+        } else {
+            System.out.println("===============找到 -Dconf.templ.path   系统环境变量，值为：  " + confTemplPath + "  " +
+                    "==================");
+        }
     }
 
     public static void initEnvVariables() {
@@ -164,9 +207,11 @@ public class JeeFrameWorkServer {
         if (Validate.isEmpty(rootLogLevel)) {
             rootLogLevel = "debug";
             System.setProperty("root.log.level", rootLogLevel);
-            System.out.println("===============没有配置  -Droot.log.level   环境变量，使用默认配置  " + rootLogLevel + "  ==================");
+            System.out.println("===============没有配置  -Droot.log.level   环境变量，使用默认配置  " + rootLogLevel + "  " +
+                    "==================");
         } else {
-            System.out.println("===============找到 -Droot.log.level   系统环境变量，值为：  " + rootLogLevel + "  ==================");
+            System.out.println("===============找到 -Droot.log.level   系统环境变量，值为：  " + rootLogLevel + "  " +
+                    "==================");
         }
 
         //模块运行时日志
@@ -178,9 +223,11 @@ public class JeeFrameWorkServer {
         if (Validate.isEmpty(runLogLevel)) {
             runLogLevel = "debug";
             System.setProperty("run.log.level", runLogLevel);
-            System.out.println("===============没有配置  -Drun.log.level   环境变量，使用默认配置  " + runLogLevel + "  ==================");
+            System.out.println("===============没有配置  -Drun.log.level   环境变量，使用默认配置  " + runLogLevel + "  " +
+                    "==================");
         } else {
-            System.out.println("===============找到 -Drun.log.level   系统环境变量，值为：  " + runLogLevel + "  ==================");
+            System.out.println("===============找到 -Drun.log.level   系统环境变量，值为：  " + runLogLevel + "  " +
+                    "==================");
         }
 
         //是否追加到rootlog中
@@ -201,41 +248,6 @@ public class JeeFrameWorkServer {
         System.out.println("===============配置 -Drun.log.additivity，值为：  " + runLogAdditivity + "  ==================");
 
         LoggerUtil.debugTrace("JeeFrameWorkServer", "初始化logger配置");
-
-        //配置api文档的是否开启
-        String confApiDoc = null;
-        try {
-            confApiDoc = System.getProperty("conf.apidoc");
-        } catch (Exception e) {
-        }
-        if (Validate.isEmpty(confApiDoc)) {
-            confApiDoc = "close";
-            System.setProperty("conf.apidoc", confApiDoc);
-            System.out.println("===============没有配置  -Dconf.apidoc   环境变量，使用默认配置  " + confApiDoc + "  ==================");
-        } else {
-            System.out.println("===============找到 -Dconf.apidoc    系统环境变量，值为：  " + confApiDoc + "  ==================");
-        }
-
-
-        //配置webview的模板路径
-        String confTemplPath = null;
-        try {
-            confTemplPath = System.getProperty("conf.templ.path");
-        } catch (Exception e) {
-        }
-        if (Validate.isEmpty(confTemplPath)) {
-            String path = WebServerUtil.findWebDescriptor();
-            if (Validate.isEmpty(path)) {
-                throw new BaseException("没有找到web.xml");
-            }
-            String jspDir = StringUtils.substringBefore(path, "web.xml") + "jsp";
-
-            confTemplPath = jspDir;
-            System.setProperty("conf.templ.path", confTemplPath);
-            System.out.println("===============没有配置  -Dconf.templ.path  环境变量，使用默认配置  " + confTemplPath + "  ==================");
-        } else {
-            System.out.println("===============找到 -Dconf.templ.path   系统环境变量，值为：  " + confTemplPath + "  ==================");
-        }
     }
 
     public ApplicationContext getApplicationContext() {
