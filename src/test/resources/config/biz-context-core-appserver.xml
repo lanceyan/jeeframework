@@ -39,13 +39,30 @@
         <property name="redisUrls" value="${redis.urls}"/>
         <!--<property name="poolType" value="hash"/>-->
         <property name="auth" value="${redis.password}"/>
-        <property name="namespace"  value="${redis.namespace}" />
+        <property name="namespace" value="${redis.namespace}"/>
 
     </bean>
 
     <bean id="baseSaoHDFS" class="com.jeeframework.logicframework.integration.sao.hdfs.BaseSaoHDFS">
         <property name="hdfsAddress" value="${hadoop.hdfsAddress}"/>
-        <property name="userName"  value="${hadoop.username}" />
+        <property name="userName" value="${hadoop.username}"/>
+    </bean>
+
+    <bean id="kafkaProducer" class="com.jeeframework.logicframework.biz.service.mq.producer.BaseKafkaProducer">
+        <property name="brokerList" value="${kafka.broker.list}"/>
+        <property name="kafkaNamespace" value="${kafka.namespace}"/>
+        <!--<property name="kafkaZookeeperConnect" value="${kafka.zookeeper.connect}"/>-->
+        <!--<property name="kafkaZookeeperNamespace" value="${kafka.zookeeper.namespace}"/>-->
+    </bean>
+
+    <bean id="kafkaConsumer" class="com.jeeframework.logicframework.biz.service.mq.consumer.BaseKafkaConsumerImpl">
+        <!--<property name="brokerList" value="${kafka.broker.list}"/>-->
+        <property name="kafkaZookeeperConnect" value="${kafka.zookeeper.connect}"/>
+        <property name="kafkaZookeeperNamespace" value="${kafka.zookeeper.namespace}"/>
+        <property name="topic" value="${kafka.topic}"/>
+        <property name="groupId" value="${kafka.groupId}"/>
+        <property name="kafkaNamespace" value="${kafka.namespace}"/>
+
     </bean>
 
 </beans>
