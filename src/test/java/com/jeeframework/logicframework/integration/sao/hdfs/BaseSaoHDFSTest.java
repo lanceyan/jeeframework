@@ -23,7 +23,7 @@ public class BaseSaoHDFSTest extends AbstractSpringBaseTestNoTransaction {
 
     @Test
     public void upload() throws Exception {
-        baseSaoHDFS.uploadFile("d:\\logs\\111.txt", "/444");
+        baseSaoHDFS.uploadFile("d:\\logs\\111.txt", "/1111");
 
     }
 
@@ -37,7 +37,7 @@ public class BaseSaoHDFSTest extends AbstractSpringBaseTestNoTransaction {
 
     @Test
     public void downLoad() throws Exception {
-        byte[] fileBytes = baseSaoHDFS.downloadFile("/111");
+        byte[] fileBytes = baseSaoHDFS.downloadFile("/555");
         System.out.println(new String(fileBytes, "GBK"));
     }
 
@@ -73,7 +73,7 @@ public class BaseSaoHDFSTest extends AbstractSpringBaseTestNoTransaction {
     @Test
     public void deleteFile() throws Exception {
 
-        baseSaoHDFS.deleteFile("/5556", true);
+        baseSaoHDFS.deleteFile("/111", true);
     }
 
     @Test

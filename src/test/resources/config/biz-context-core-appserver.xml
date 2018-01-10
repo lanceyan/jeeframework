@@ -48,21 +48,21 @@
         <property name="userName" value="${hadoop.username}"/>
     </bean>
 
-    <bean id="kafkaProducer" class="com.jeeframework.logicframework.biz.service.mq.producer.BaseKafkaProducer">
-        <property name="brokerList" value="${kafka.broker.list}"/>
-        <property name="kafkaNamespace" value="${kafka.namespace}"/>
+    <!--<bean id="kafkaProducer" class="com.jeeframework.logicframework.biz.service.mq.producer.BaseKafkaProducer">-->
+        <!--<property name="brokerList" value="${kafka.broker.list}"/>-->
+        <!--<property name="kafkaNamespace" value="${kafka.namespace}"/>-->
+        <!--&lt;!&ndash;<property name="kafkaZookeeperConnect" value="${kafka.zookeeper.connect}"/>&ndash;&gt;-->
+        <!--&lt;!&ndash;<property name="kafkaZookeeperNamespace" value="${kafka.zookeeper.namespace}"/>&ndash;&gt;-->
+    <!--</bean>-->
+
+    <!--<bean id="kafkaConsumer" class="com.jeeframework.logicframework.biz.service.mq.consumer.BaseKafkaConsumerImpl">-->
+        <!--&lt;!&ndash;<property name="brokerList" value="${kafka.broker.list}"/>&ndash;&gt;-->
         <!--<property name="kafkaZookeeperConnect" value="${kafka.zookeeper.connect}"/>-->
         <!--<property name="kafkaZookeeperNamespace" value="${kafka.zookeeper.namespace}"/>-->
-    </bean>
+        <!--<property name="topic" value="${kafka.topic}"/>-->
+        <!--<property name="groupId" value="${kafka.groupId}"/>-->
+        <!--<property name="kafkaNamespace" value="${kafka.namespace}"/>-->
 
-    <bean id="kafkaConsumer" class="com.jeeframework.logicframework.biz.service.mq.consumer.BaseKafkaConsumerImpl">
-        <!--<property name="brokerList" value="${kafka.broker.list}"/>-->
-        <property name="kafkaZookeeperConnect" value="${kafka.zookeeper.connect}"/>
-        <property name="kafkaZookeeperNamespace" value="${kafka.zookeeper.namespace}"/>
-        <property name="topic" value="${kafka.topic}"/>
-        <property name="groupId" value="${kafka.groupId}"/>
-        <property name="kafkaNamespace" value="${kafka.namespace}"/>
-
-    </bean>
+    <!--</bean>-->
 
 </beans>

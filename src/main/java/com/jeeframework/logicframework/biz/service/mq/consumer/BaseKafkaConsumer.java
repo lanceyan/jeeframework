@@ -38,7 +38,7 @@ public abstract class BaseKafkaConsumer implements BaseConsumer, ContextManageBe
 
 
     private static final Logger logger = Logger.getLogger(BaseKafkaConsumer.class);
-    private static final int KAFKA_SERVER_CPUS = 4;
+    private static final int KAFKA_SERVER_CPUS = 2;
 
     private int threadNum = 0; //线程数量
     private String groupId = null;  //消息消费者的分组id
